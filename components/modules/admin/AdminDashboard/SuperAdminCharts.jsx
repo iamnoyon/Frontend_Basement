@@ -20,7 +20,7 @@ const SuperAdminCharts = () => {
                 <YearPicker className="ml-auto" value={year} onChange={setYear}/>
             </div>
             {/* bar charts  */}
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2 my-5'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-5'>
                 <ReactBarChart
                     title={`Total Revenue Per Year`}
                     xKey='monthName'
@@ -38,7 +38,7 @@ const SuperAdminCharts = () => {
             </div>
 
             {/* pie chart  */}
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
                 <ReactPieChart
                     data={chartData?.data?.pieChart || []}
                     title='Status Overview'

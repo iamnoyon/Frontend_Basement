@@ -36,7 +36,7 @@ const AdminCharts = () => {
                     onChange={setDateRangeForChart}
                     placeholder="Date From - Date To" />
             </div>
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2 my-5'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-5'>
                 <ReactBarChart
                     title={`Total Revenue (${chartData?.data?.labels[0]?.split('-')[0]})`}
                     xKey='monthName'
@@ -51,7 +51,7 @@ const AdminCharts = () => {
                     loading={chartLoading}
                 />
             </div>
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
                 <RecentOrderTable />
                 <ReactPieChart
                     data={chartData?.data?.pieChart || []}
