@@ -20,7 +20,7 @@ const AdminDashboard = () => {
         <StatCard
           key={1}
           title='Total Revenue'
-          value={`৳ ${summaryCards?.data?.totalRevenue?.value}`}
+          value={`৳ ${summaryCards?.data?.totalRevenue?.value ?? '-'}`}
           iconName={Gauge}
           trendValue={summaryCards?.data?.totalRevenue?.change}
           trend={summaryCards?.data?.totalRevenue?.trend}
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
         <StatCard
           key={2}
           title='Others Expense'
-          value={`৳ ${summaryCards?.data?.totalExpenses?.value}`}
+          value={`৳ ${summaryCards?.data?.totalExpenses?.value ?? '-'}`}
           iconName={Banknote}
           trendValue={summaryCards?.data?.totalExpenses?.change}
           trend={summaryCards?.data?.totalExpenses?.trend}
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
         <StatCard
           key={3}
           title='Total Orders'
-          value={summaryCards?.data?.totalOrders?.value}
+          value={summaryCards?.data?.totalOrders?.value ?? '-'}
           iconName={Utensils}
           trendValue={summaryCards?.data?.totalOrders?.change}
           trend={summaryCards?.data?.totalOrders?.trend}
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
         <StatCard
           key={4}
           title='Net Profit'
-          value={`৳ ${summaryCards?.data?.netProfit?.value}`}
+          value={`৳ ${summaryCards?.data?.netProfit?.value ?? '-'}`}
           iconName={Receipt}
           trendValue={summaryCards?.data?.netProfit?.change}
           trend={summaryCards?.data?.netProfit?.trend}

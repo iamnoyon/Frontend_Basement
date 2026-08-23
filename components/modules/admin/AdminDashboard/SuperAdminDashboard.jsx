@@ -22,7 +22,7 @@ const SuperAdminDashboard = () => {
                 <StatCard
                     key={1}
                     title='Total Businesses'
-                    value={`${summaryCards?.data?.totalBusinesses}` || ''}
+                    value={`${summaryCards?.data?.totalBusinesses ?? '-'}`}
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
@@ -32,7 +32,7 @@ const SuperAdminDashboard = () => {
                 <StatCard
                     key={2}
                     title='Active Businesses'
-                    value={`${summaryCards?.data?.activeSubscriptions}` || ''}
+                    value={`${summaryCards?.data?.activeSubscriptions ?? '-'}`}
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
@@ -42,7 +42,7 @@ const SuperAdminDashboard = () => {
                 <StatCard
                     key={3}
                     title='Inactive Businesses'
-                    value={`${summaryCards?.data?.inactiveSubscriptions}` || ''}
+                    value={`${summaryCards?.data?.inactiveSubscriptions ?? '-'}`}
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
@@ -52,7 +52,7 @@ const SuperAdminDashboard = () => {
                 <StatCard
                     key={4}
                     title='Total Sell'
-                    value={`${summaryCards?.data?.totalRevenue}` || ''}
+                    value={`${summaryCards?.data?.totalRevenue ?? '-'}`}
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
@@ -62,7 +62,7 @@ const SuperAdminDashboard = () => {
                 <StatCard
                     key={5}
                     title='Expire Soon'
-                    value={`${summaryCards?.data?.expiringSoon}` || ''}
+                    value={`${summaryCards?.data?.expiringSoon ?? '-'}`}
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
