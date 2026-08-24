@@ -9,8 +9,10 @@ const RenderDashboard = () => {
     const user = useSelector((state) => state?.user);
     const userRole = user?.role || '';
 
-  return userRole == 'admin' ? <AdminDashboard /> : <SuperAdminDashboard />
-  // return <AdminDashboard /> 
+    if(userRole == 'admin') return <AdminDashboard />
+    if(userRole == 'superadmin') return <SuperAdminDashboard />
+
+  return null
 }
 
 export default RenderDashboard
