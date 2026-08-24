@@ -1,5 +1,39 @@
 "use client";
 
+const STATUS_COLORS = {
+    healthy: "#16A34A",
+    unhealthy: "#EF4444",
+    degraded: "#F59E0B",
+    warning: "#F59E0B",
+    critical: "#EF4444",
+    ok: "#16A34A",
+    down: "#EF4444",
+};
+
+function getValueColor(item) {
+    if (item.color) return item.color;
+    if (typeof item.value === "string") {
+        const key = item.value.toLowerCase();
+        return STATUS_COLORS[key] || "#6b7280";
+    }
+    if (typeof item.value === "number") {
+        if (item.value >= 90) return "#EF4444";
+        if (item.value >= 70) return "#F59E0B";
+        return "#16A34A";
+    }
+    return "#6b7280";
+}
+
+function renderValue(item) {
+    const { value, suffix } = item;
+    if (typeof value === "string") return value;
+    if (typeof value === "number") {
+        const formatted = value % 1 === 0 ? value.toString() : value.toFixed(2);
+        return suffix ? `${formatted}${suffix}` : formatted;
+    }
+    return value ?? "-";
+}
+
 export default function ReactKPICard({
     data = [],
     title = "",
@@ -9,15 +43,6 @@ export default function ReactKPICard({
     valueFormatter,
     gridCols = 2,
 }) {
-    const formatValue = (value) => {
-        if (valueFormatter) return valueFormatter(value);
-        if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-        if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
-        if (value >= 1e3) return `${(value / 1e3).toFixed(1)}K`;
-        return value?.toLocaleString?.() ?? value;
-    };
-
-    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
 
     return (
         <div
@@ -100,8 +125,7 @@ export default function ReactKPICard({
                     }}
                 >
                     {data.map((item, index) => {
-                        const value = Number(item.value) || 0;
-                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                        const color = getValueColor(item);
 
                         return (
                             <div
@@ -110,8 +134,8 @@ export default function ReactKPICard({
                                     padding: 14,
                                     borderRadius: 10,
                                     backgroundColor: "#f9fafb",
-                                    border: `1px solid ${item.color || "#e5e7eb"}20`,
-                                    borderLeft: `3px solid ${item.color || "#e5e7eb"}`,
+                                    border: `1px solid ${color}20`,
+                                    borderLeft: `3px solid ${color}`,
                                 }}
                             >
                                 <div className="mb-1 flex items-center gap-2">
@@ -120,7 +144,7 @@ export default function ReactKPICard({
                                             width: 10,
                                             height: 10,
                                             borderRadius: "50%",
-                                            backgroundColor: item.color || "#e5e7eb",
+                                            backgroundColor: color,
                                             display: "inline-block",
                                             flexShrink: 0,
                                         }}
@@ -140,22 +164,13 @@ export default function ReactKPICard({
                                         style={{
                                             fontSize: 20,
                                             fontWeight: 700,
-                                            color: "#111827",
+                                            color: color,
                                         }}
                                     >
-                                        {formatValue(value)}
+                                        {valueFormatter
+                                            ? valueFormatter(item.value)
+                                            : renderValue(item)}
                                     </span>
-
-                                    {total > 0 && (
-                                        <span
-                                            style={{
-                                                fontSize: 11,
-                                                color: "#9ca3af",
-                                            }}
-                                        >
-                                            {percentage}%
-                                        </span>
-                                    )}
                                 </div>
                             </div>
                         );

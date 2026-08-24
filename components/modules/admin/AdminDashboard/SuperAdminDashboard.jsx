@@ -4,6 +4,7 @@ import StatCard from '@/components/common/StatCard'
 import { Gauge } from 'lucide-react'
 import { useGetSuperAdminSummaryCardQuery } from '@/store/admin/dashboard'
 import SuperAdminCharts from './SuperAdminCharts'
+import SystemHealth from './SystemHealth'
 
 const SuperAdminDashboard = () => {
     const { data: summaryCards, isLoading } = useGetSuperAdminSummaryCardQuery()
@@ -65,6 +66,7 @@ const SuperAdminDashboard = () => {
                 />
             </div>
             <SuperAdminCharts />
+            <SystemHealth />
         </div>
     )
 }
