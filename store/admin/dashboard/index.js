@@ -4,15 +4,23 @@ import { apiSlice } from "../../apiSlice";
 export const dashboardSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAdminSummaryCard: builder.query({
-      query: () => ({
+      query: ({ startDate, endDate } = {}) => ({
         url: "/dashboard/summary",
         method: "GET",
+        params: {
+          ...(startDate && { startDate }),
+          ...(endDate && { endDate }),
+        },
       }),
     }),
     getAdminChart: builder.query({
-      query: () => ({
+      query: ({ startDate, endDate } = {}) => ({
         url: '/dashboard/charts',
-        method: "GET"
+        method: "GET",
+        params: {
+          ...(startDate && { startDate }),
+          ...(endDate && { endDate }),
+        },
       })
     }),
     getRecentOderList: builder.query({
@@ -45,5 +53,7 @@ export const {
     useGetAdminChartQuery,
     useGetRecentOderListQuery,
     useGetSuperAdminSummaryCardQuery,
-    useLazyGetSuperAdminChartsQuery
+    useLazyGetSuperAdminChartsQuery,
+    useLazyGetAdminSummaryCardQuery,
+    useLazyGetAdminChartQuery
 } = dashboardSlice;

@@ -1,22 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import StatCard from '@/components/common/StatCard'
-import React, { useState } from 'react'
-import { useGetAdminChartQuery, useGetAdminSummaryCardQuery } from '@/store/admin/dashboard'
+import React, { useEffect, useState } from 'react'
+import { useLazyGetAdminSummaryCardQuery } from '@/store/admin/dashboard'
 import { Gauge, Receipt, Utensils, Banknote } from 'lucide-react'
-import ReactBarChart from '@/components/common/ReactBarChart'
-import ReactPieChart from '@/components/common/ReactPieChart'
-import RecentOrderTable from './RecentOrderTable'
 import DateRangePicker from '@/components/common/DateRangePicker'
+import AdminCharts from './AdminCharts'
 
 
 const AdminDashboard = () => {
   const [dateRange, setDateRange] = useState({
-    from: undefined,
-    to: undefined,
+    startDate: null,
+    endDate: null,
   });
-  const { data: summaryCards, isLoading } = useGetAdminSummaryCardQuery()
-  const { data: chartData, isLoading: chartLoading } = useGetAdminChartQuery()
+  const [triggerSummary, { data: summaryCards, isLoading }] = useLazyGetAdminSummaryCardQuery()
+  const formatParams = (range) => ({
+    startDate: range.startDate
+      ? range.startDate.toISOString().split('T')[0]
+      : undefined,
+    endDate: range.endDate
+      ? range.endDate.toISOString().split('T')[0]
+      : undefined,
+  })
+
+  useEffect(() => {
+    triggerSummary(formatParams(dateRange))
+  }, [dateRange])
+
+
   return (
     <div>
       <div className='mb-3'>
@@ -79,32 +91,7 @@ const AdminDashboard = () => {
           borderColor='border-b-lime-600'
         /> */}
       </div>
-
-      {/* Chart section */}
-      <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2 my-5'>
-        <ReactBarChart
-          title={`Total Revenue (${chartData?.data?.labels[0]?.split('-')[0]})`}
-          xKey='monthName'
-          data={chartData?.data?.revenuePerMonth || []}
-          loading={chartLoading}
-        />
-        <ReactBarChart
-          title={`Net Profit (${chartData?.data?.labels[0]?.split('-')[0]})`}
-          xKey='monthName'
-          color='#249D8F'
-          data={chartData?.data?.netProfitPerMonth || []}
-          loading={chartLoading}
-        />
-      </div>
-      <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2'>
-        <RecentOrderTable />
-        <ReactPieChart
-          data={chartData?.data?.pieChart || []}
-          title='Profit/Expense'
-          loading={chartLoading}
-        />
-        {/* <ReactKPICard data={chartData?.data?.pieChart || []}/>  */}
-      </div>
+      <AdminCharts />
     </div>
   )
 }
