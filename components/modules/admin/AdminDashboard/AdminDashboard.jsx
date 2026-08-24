@@ -1,20 +1,31 @@
 "use client"
 
 import StatCard from '@/components/common/StatCard'
-import React from 'react'
+import React, { useState } from 'react'
 import { useGetAdminChartQuery, useGetAdminSummaryCardQuery } from '@/store/admin/dashboard'
-import { BanknoteArrowDown, Gauge, Receipt, ShieldCheck, Utensils, Banknote } from 'lucide-react'
+import { Gauge, Receipt, Utensils, Banknote } from 'lucide-react'
 import ReactBarChart from '@/components/common/ReactBarChart'
 import ReactPieChart from '@/components/common/ReactPieChart'
-import ReactKPICard from '@/components/common/ReactKPICard'
 import RecentOrderTable from './RecentOrderTable'
+import DateRangePicker from '@/components/common/DateRangePicker'
 
 
 const AdminDashboard = () => {
-  const { data: summaryCards, isLoading } = useGetAdminSummaryCardQuery({pollingInterval: 5 * 60 * 1000})
-  const { data: chartData, isLoading: chartLoading } = useGetAdminChartQuery({pollingInterval: 5 * 60 * 1000})
+  const [dateRange, setDateRange] = useState({
+    from: undefined,
+    to: undefined,
+  });
+  const { data: summaryCards, isLoading } = useGetAdminSummaryCardQuery()
+  const { data: chartData, isLoading: chartLoading } = useGetAdminChartQuery()
   return (
     <div>
+      <div className='mb-3'>
+        <DateRangePicker
+          className="ml-auto"
+          value={dateRange}
+          onChange={setDateRange}
+          placeholder="Date From - Date To" />
+      </div>
       {/* Stat card section */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
@@ -87,11 +98,11 @@ const AdminDashboard = () => {
       </div>
       <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2'>
         <RecentOrderTable />
-        <ReactPieChart 
-        data={chartData?.data?.pieChart || []}
-        title='Profit/Expense'
-        loading={chartLoading}
-        /> 
+        <ReactPieChart
+          data={chartData?.data?.pieChart || []}
+          title='Profit/Expense'
+          loading={chartLoading}
+        />
         {/* <ReactKPICard data={chartData?.data?.pieChart || []}/>  */}
       </div>
     </div>
