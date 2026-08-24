@@ -9,10 +9,18 @@ export const healthSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["health"],
     }),
+    getSystemHealthLineChart: builder.query({
+      query: () => ({
+        url: "/health/history",
+        method: "GET",
+      }),
+      invalidatesTags: ["health"],
+    }),
   }),
   overrideExisting: true,
 });
 
 export const {
-    useGetSystemHealthQuery
+    useGetSystemHealthQuery,
+    useGetSystemHealthLineChartQuery
 } = healthSlice;
