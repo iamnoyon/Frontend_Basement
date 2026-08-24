@@ -15,9 +15,9 @@ const SuperAdminCharts = () => {
     }, [year])
 
     return (
-        <div>
+        <div className='mt-5'>
             <div>
-                <YearPicker value={year} onChange={setYear}/>
+                <YearPicker className="ml-auto" value={year} onChange={setYear}/>
             </div>
             {/* bar charts  */}
             <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2 my-5'>

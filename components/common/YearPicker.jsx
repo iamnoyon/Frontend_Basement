@@ -10,7 +10,7 @@ const YearPicker = ({
   placeholder = "Select year",
   className = "",
   disabled = false,
-  width = "w-[160px]",
+  width = "w-[180px]",
   minYear,
   maxYear,
 }) => {
