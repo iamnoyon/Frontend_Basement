@@ -1,19 +1,12 @@
 "use client"
 
-import React, { useEffect } from 'react'
 import StatCard from '@/components/common/StatCard'
 import { Gauge } from 'lucide-react'
-import { useGetSuperAdminSummaryCardQuery, useLazyGetSuperAdminChartsQuery } from '@/store/admin/dashboard'
-import ReactBarChart from '@/components/common/ReactBarChart'
-import ReactPieChart from '@/components/common/ReactPieChart'
+import { useGetSuperAdminSummaryCardQuery } from '@/store/admin/dashboard'
+import SuperAdminCharts from './SuperAdminCharts'
 
 const SuperAdminDashboard = () => {
     const { data: summaryCards, isLoading } = useGetSuperAdminSummaryCardQuery()
-    const [triggerChart, { data: chartData, isLoading: chartLoading }] = useLazyGetSuperAdminChartsQuery()
-
-    useEffect(() => {
-        triggerChart({})
-    }, [triggerChart])
 
     return (
         <div>
@@ -70,34 +63,7 @@ const SuperAdminDashboard = () => {
                     loading={isLoading}
                 />
             </div>
-
-            {/* bar charts  */}
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2 my-5'>
-                <ReactBarChart
-                    title={`Total Revenue Per Year`}
-                    xKey='monthName'
-                    data={chartData?.data?.revenuePerMonth || []}
-                    loading={chartLoading}
-                />
-                <ReactBarChart
-                    title={`Total Active Business Per Year`}
-                    xKey='monthName'
-                    data={chartData?.data?.businesses || []}
-                    loading={chartLoading}
-                    yKey='count'
-                    color='#249D8F'
-                />
-            </div>
-
-            {/* pie chart  */}
-            <div className='grid grid-cols-1 gap-5 lg:gap-10 sm:grid-cols-2'>
-                <ReactPieChart
-                    data={chartData?.data?.pieChart || []}
-                    title='Status Overview'
-                    loading={chartLoading}
-                />
-                {/* <ReactKPICard data={chartData?.data?.pieChart || []}/>  */}
-            </div>
+            <SuperAdminCharts />
         </div>
     )
 }
