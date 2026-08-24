@@ -43,6 +43,14 @@ export const dashboardSlice = apiSlice.injectEndpoints({
         method: 'GET',
         params
       })
+    }),
+    getExpiringBusinesses: builder.query({
+      query: (params) => ({
+        url: '/dashboard/admin/expiring-businesses',
+        method: 'GET',
+        params,
+      }),
+      transformResponse: (response) => transformListResponse(response),
     })
   }),
   overrideExisting: true,
@@ -55,5 +63,6 @@ export const {
     useGetSuperAdminSummaryCardQuery,
     useLazyGetSuperAdminChartsQuery,
     useLazyGetAdminSummaryCardQuery,
-    useLazyGetAdminChartQuery
+    useLazyGetAdminChartQuery,
+    useLazyGetExpiringBusinessesQuery
 } = dashboardSlice;

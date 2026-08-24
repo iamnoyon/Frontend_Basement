@@ -29,14 +29,14 @@ const AdminCharts = () => {
     return (
         <div>
             {/* Chart section */}
-            <div className='mt-5'>
+            <div className='mt-5 flex justify-between items-center'>
+                <h1 className='text-xl font-semibold'>Dashboard Charts</h1>
                 <DateRangePicker
-                    className="ml-auto"
                     value={dateRangeForChart}
                     onChange={setDateRangeForChart}
                     placeholder="Date From - Date To" />
             </div>
-            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-5'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-3'>
                 <ReactBarChart
                     title={`Total Revenue (${chartData?.data?.labels[0]?.split('-')[0]})`}
                     xKey='monthName'
@@ -51,7 +51,7 @@ const AdminCharts = () => {
                     loading={chartLoading}
                 />
             </div>
-            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 mt-5'>
                 <RecentOrderTable />
                 <ReactPieChart
                     data={chartData?.data?.pieChart || []}

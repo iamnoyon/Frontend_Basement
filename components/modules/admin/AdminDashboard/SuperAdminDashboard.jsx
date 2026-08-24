@@ -10,6 +10,7 @@ const SuperAdminDashboard = () => {
 
     return (
         <div>
+            <h3 className='text-xl font-bold mb-3'>Dashboard Summary</h3>
             {/* Stat card section */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5">
                 <StatCard

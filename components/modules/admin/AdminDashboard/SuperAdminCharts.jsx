@@ -5,6 +5,7 @@ import ReactPieChart from '@/components/common/ReactPieChart'
 import YearPicker from '@/components/common/YearPicker'
 import { useLazyGetSuperAdminChartsQuery } from '@/store/admin/dashboard'
 import React, { memo, useEffect, useState } from 'react'
+import ExpireSoonRes from '@/components/modules/admin/AdminDashboard/ExpireSoonRes'
 
 const SuperAdminCharts = () => {
     const [year, setYear] = useState(null)
@@ -16,11 +17,12 @@ const SuperAdminCharts = () => {
 
     return (
         <div className='mt-5'>
-            <div>
-                <YearPicker className="ml-auto" value={year} onChange={setYear}/>
+            <div className='flex justify-between items-center'>
+                <h3 className='text-xl font-bold'>Dashboard Charts</h3>
+                <YearPicker value={year} onChange={setYear}/>
             </div>
             {/* bar charts  */}
-            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-5'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 my-3'>
                 <ReactBarChart
                     title={`Total Revenue Per Year`}
                     xKey='monthName'
@@ -38,7 +40,8 @@ const SuperAdminCharts = () => {
             </div>
 
             {/* pie chart  */}
-            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 mt-5'>
+                <ExpireSoonRes />
                 <ReactPieChart
                     data={chartData?.data?.pieChart || []}
                     title='Status Overview'

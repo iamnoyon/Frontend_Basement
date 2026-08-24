@@ -31,9 +31,9 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <div className='mb-3'>
+      <div className='mb-3 flex justify-between items-center'>
+        <h3 className='text-xl font-semibold'>Dashboard Summary</h3>
         <DateRangePicker
-          className="ml-auto"
           value={dateRange}
           onChange={setDateRange}
           placeholder="Date From - Date To" />

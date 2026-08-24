@@ -25,7 +25,7 @@ export default function ReactBarChart({
         if (loading || !chartRef.current || !data?.length) return;
 
         const dom = chartRef.current;
-        const chart = echarts.init(dom);
+        const chart = echarts.init(dom, null, { renderer: 'canvas', devicePixelRatio: window.devicePixelRatio || 2 });
 
         const labels = data.map((item) => item[xKey]);
         const values = data.map((item) => Number(item[yKey]) || 0);
@@ -43,6 +43,7 @@ export default function ReactBarChart({
                         fontSize: 14,
                         fontWeight: 600,
                         color: "#111827",
+                        fontFamily: "Manrope, sans-serif",
                     },
                 }
                 : undefined,
@@ -55,6 +56,7 @@ export default function ReactBarChart({
                 backgroundColor: "rgba(17, 24, 39, 0.9)",
                 textStyle: {
                     color: "#fff",
+                    fontFamily: "Manrope, sans-serif",
                 },
                 formatter:
                     formatter ||
@@ -77,8 +79,9 @@ export default function ReactBarChart({
                 data: labels,
 
                 axisLabel: {
-                    color: "#6b7280",
-                    fontSize: 11,
+                    color: "#374151",
+                    fontSize: 12,
+                    fontFamily: "Manrope, sans-serif",
                     rotate: 0,
                 },
 
@@ -97,8 +100,9 @@ export default function ReactBarChart({
                 nameGap: 26,
 
                 nameTextStyle: {
-                    color: "#374151",
-                    fontSize: 12,
+                    color: "#1f2937",
+                    fontSize: 13,
+                    fontFamily: "Manrope, sans-serif",
                 },
             },
 
@@ -106,8 +110,9 @@ export default function ReactBarChart({
                 type: "value",
 
                 axisLabel: {
-                    color: "#6b7280",
-                    fontSize: 11,
+                    color: "#374151",
+                    fontSize: 12,
+                    fontFamily: "Manrope, sans-serif",
                 },
 
                 axisLine: {
@@ -125,8 +130,9 @@ export default function ReactBarChart({
                 name: yAxisName,
 
                 nameTextStyle: {
-                    color: "#374151",
-                    fontSize: 12,
+                    color: "#1f2937",
+                    fontSize: 13,
+                    fontFamily: "Manrope, sans-serif",
                 },
             },
 

@@ -45,22 +45,31 @@ export default function ReactPieChart({
         if (!dom) return;
 
         if (!instanceRef.current) {
-            instanceRef.current = echarts.init(dom);
+            instanceRef.current = echarts.init(dom, null, { renderer: 'canvas', devicePixelRatio: window.devicePixelRatio || 2 });
         }
 
         const option = {
             title: {
                 text: title,
                 left: "center",
+                textStyle: {
+                    fontFamily: "Manrope, sans-serif",
+                },
             },
 
             tooltip: {
                 trigger: "item",
+                textStyle: {
+                    fontFamily: "Manrope, sans-serif",
+                },
             },
 
             legend: {
                 orient: "vertical",
                 left: "left",
+                textStyle: {
+                    fontFamily: "Manrope, sans-serif",
+                },
             },
 
             color: colors.length

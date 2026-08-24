@@ -148,7 +148,7 @@ export default function ProfilePage() {
     const tabs = [
         { id: "profile", label: "Profile Info", icon: User },
         { id: "business", label: "Business Info", icon: Building2 },
-        { id: "billing", label: "Billing Info", icon: Receipt },
+        // { id: "billing", label: "Billing Info", icon: Receipt },
     ];
 
     const hiddenRoles = ["cashier", "waiter"];
@@ -200,9 +200,9 @@ export default function ProfilePage() {
                     <BusinessInfo user={user} />
                 )}
 
-                {activeTab === "billing" && (
+                {/* {activeTab === "billing" && (
                     <BillingInfo user={user} statusColor={statusColor} />
-                )}
+                )} */}
 
             </div>
         </div>
