@@ -61,6 +61,7 @@ export const productSlice = apiSlice.injectEndpoints({
         method: "GET",
         params
       }),
+      keepUnusedDataFor: Infinity, // cached api call
     })
   }),
   overrideExisting: true,

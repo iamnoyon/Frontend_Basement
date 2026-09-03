@@ -16,8 +16,10 @@ import {
 } from "lucide-react";
 import Loading from "@/components/common/Loading";
 import useToaster from "@/components/hooks/useToaster";
+import { useRouter } from "next/navigation";
 
 const MakePayment = () => {
+  const router = useRouter();
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedPackage, setSelectedPackage] = useState(null);
   const { successToaster, errorToaster } = useToaster();
@@ -66,6 +68,7 @@ const MakePayment = () => {
       .unwrap()
       .then((res) => {
         if (res?.success) {
+          router.push("/payments");
           successToaster(res?.message || "Package purchased successfully");
           if (res?.data?.gatewayUrl) {
             window.location.href = res.data.gatewayUrl;
