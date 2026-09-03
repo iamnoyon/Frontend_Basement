@@ -50,11 +50,11 @@ export default function Topbar({ onMenuToggle }) {
 
             <div className="flex items-center gap-4 ml-auto">
                 {/* Notification */}
-                <button className="relative rounded-full p-2 transition hover:bg-gray-100">
+                {/* <button className="relative rounded-full p-2 transition hover:bg-gray-100">
                     <Bell size={20} className="text-gray-600" />
 
                     <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500"></span>
-                </button>
+                </button> */}
 
                 {/* User Dropdown */}
                 <div className="relative" ref={dropdownRef}>
