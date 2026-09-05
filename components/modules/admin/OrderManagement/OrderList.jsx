@@ -59,6 +59,15 @@ const OrderList = ({ onEditOrder }) => {
           </span>
         ),
       }),
+      columnHelper.accessor("tableName", {
+        id: "tableName",
+        header: () => "Table",
+        cell: (info) => (
+          <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+            {info.getValue()}
+          </span>
+        ),
+      }),
       columnHelper.accessor("totalBill", {
         id: "totalBill",
         header: () => "Total Bill",
