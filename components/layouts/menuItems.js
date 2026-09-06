@@ -25,6 +25,7 @@ export const menuItems = [
     icon: LayoutDashboard,
     path: "/dashboard",
     activePath: ["/dashboard"],
+    requiredPermissions: ["dashboard:read"]
   },
   {
     name: "Businesses",

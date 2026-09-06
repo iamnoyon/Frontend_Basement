@@ -96,7 +96,10 @@ const NewOrder = () => {
 
   useEffect(() => {
     if (selectedCategory?.id) {
-      triggerProducts({ categoryId: selectedCategory.id });
+      triggerProducts(
+        { categoryId: selectedCategory.id },
+        { preferCache: true }
+      );
     }
   }, [selectedCategory]);
 
