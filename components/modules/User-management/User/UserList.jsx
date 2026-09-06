@@ -31,7 +31,7 @@ const UserList = () => {
         Update({ id, data:{status: status} })
             .unwrap()
             .then((res) => {
-                if (res?.success == true, res?.status_code == 200) {
+                if (res?.success == true || res?.status_code == 200) {
                     successToaster(res?.message || 'User status updated successfully!')
                 }
             })
