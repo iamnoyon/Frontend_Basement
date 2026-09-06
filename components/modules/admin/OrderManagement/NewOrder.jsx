@@ -701,7 +701,7 @@ const NewOrder = () => {
         </div>
 
         <div className="w-[25%] min-w-[300px] flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100">
+          <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-[#043570] flex items-center gap-2">
               <ShoppingCart size={18} />
               Current Order
