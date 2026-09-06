@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading'
 import CreateExpense from '@/components/modules/admin/ExpenseManagement/CreateExpense'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <CreateExpense />
-    </div>
+    </Suspense>
   )
 }
 

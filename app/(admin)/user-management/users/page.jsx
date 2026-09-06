@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import UserList from '@/components/modules/User-management/User/UserList';
+import Loading from '@/components/common/Loading';
 
 const page = () => {
   return (
-    <UserList />
+    <Suspense fallback={<Loading />}>
+      <UserList />
+    </Suspense>
   )
 }
 

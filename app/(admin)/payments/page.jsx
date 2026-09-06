@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading';
 import PaymentList from '@/components/modules/admin/PaymentManagement/PaymentList';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
       <PaymentList />
-    </div>
+    </Suspense>
   );
 };
 

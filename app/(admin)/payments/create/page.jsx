@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading';
 import MakePayment from '@/components/modules/admin/PaymentManagement/MakePayment';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
       <MakePayment />
-    </div>
+    </Suspense>
   );
 };
 

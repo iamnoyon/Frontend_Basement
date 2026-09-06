@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import EditProductCategory from '@/components/modules/admin/product-management/productCategory/EditProductCategory.jsx'
+import Loading from '@/components/common/Loading'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <EditProductCategory />
-    </div>
+    </Suspense>
   )
 }
 

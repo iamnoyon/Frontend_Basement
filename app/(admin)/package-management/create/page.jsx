@@ -1,9 +1,12 @@
+import Loading from '@/components/common/Loading'
 import CreatePackage from '@/components/modules/admin/PackageManagement/CreatePackage'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div><CreatePackage /></div>
+    <Suspense fallback={<Loading />}>
+      <CreatePackage />
+    </Suspense>
   )
 }
 

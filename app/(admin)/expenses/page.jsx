@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading'
 import ExpenseList from '@/components/modules/admin/ExpenseManagement/ExpenseList'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <ExpenseList />
-    </div>
+    </Suspense>
   )
 }
 

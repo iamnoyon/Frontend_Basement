@@ -1,9 +1,12 @@
+import Loading from '@/components/common/Loading'
 import CMSContent from '@/components/modules/admin/cms/CMSContent'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 function page() {
   return (
-    <CMSContent />
+    <Suspense fallback={<Loading />}>
+      <CMSContent />
+    </Suspense>
   )
 }
 

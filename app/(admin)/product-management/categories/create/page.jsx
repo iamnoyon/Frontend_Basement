@@ -3,7 +3,9 @@ import CreateProductCategory from '@/components/modules/admin/product-management
 
 const page = () => {
   return (
-    <CreateProductCategory />
+    <Suspense fallback={<Loading />}>
+      <CreateProductCategory />
+    </Suspense>
   )
 }
 

@@ -1,9 +1,12 @@
+import Loading from '@/components/common/Loading'
 import CreateTable from '@/components/modules/admin/TableManagement/CreateTable'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div><CreateTable /></div>
+    <Suspense fallback={<Loading />}>
+      <CreateTable />
+    </Suspense>
   )
 }
 

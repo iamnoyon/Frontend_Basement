@@ -1,13 +1,16 @@
+import Loading from '@/components/common/Loading'
 import UserEdit from '@/components/modules/User-management/User/UserEdit'
 import UserPermissionUpdate from '@/components/modules/User-management/User/UserPermissionUpdate'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div className='flex flex-col gap-10'>
-      <UserEdit />
-      <UserPermissionUpdate />
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div className='flex flex-col gap-10'>
+        <UserEdit />
+        <UserPermissionUpdate />
+      </div>
+    </Suspense>
   )
 }
 

@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading'
 import EditPackage from '@/components/modules/admin/PackageManagement/EditPackage'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <EditPackage />
-    </div>
+    </Suspense>
   )
 }
 

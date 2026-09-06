@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading'
 import EditTable from '@/components/modules/admin/TableManagement/EditTable'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <EditTable />
-    </div>
+    </Suspense>
   )
 }
 

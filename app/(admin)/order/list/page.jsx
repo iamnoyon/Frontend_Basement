@@ -1,11 +1,12 @@
+import Loading from '@/components/common/Loading'
 import OrderList from '@/components/modules/admin/OrderManagement/OrderList'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div>
+    <Suspense fallback={<Loading />}>
         <OrderList />
-    </div>
+    </Suspense>
   )
 }
 

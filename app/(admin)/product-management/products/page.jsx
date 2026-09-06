@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ProductList from '@/components/modules/admin/product-management/products/ProductList'
+import Loading from '@/components/common/Loading'
 
 const page = () => {
   return (
-    <ProductList />
+    <Suspense fallback={<Loading />}>
+      <ProductList />
+    </Suspense>
   )
 }
 

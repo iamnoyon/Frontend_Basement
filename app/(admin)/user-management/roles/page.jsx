@@ -1,9 +1,12 @@
+import Loading from '@/components/common/Loading'
 import RoleManagementPage from '@/components/modules/User-management/Role/RoleManagementPage'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <RoleManagementPage />
+    <Suspense fallback={<Loading />}>
+      <RoleManagementPage />
+    </Suspense>
   )
 }
 

@@ -1,9 +1,12 @@
+import Loading from '@/components/common/Loading'
 import EditExpense from '@/components/modules/admin/ExpenseManagement/EditExpense'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
-    <div><EditExpense /></div>
+    <Suspense fallback={<Loading />}>
+      <EditExpense />
+    </Suspense>
   )
 }
 
