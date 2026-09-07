@@ -5,13 +5,13 @@ import React from 'react'
 import { User } from "lucide-react";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userSchema } from './schema';
-import Formwrapper from '@/Forms/Formwrapper';
-import FormInput from '@/Forms/FormInput';
+import Formwrapper from '@/components/Forms/Formwrapper';
+import FormInput from '@/components/Forms/FormInput';
 import { useForm } from 'react-hook-form';
 import { useCreateUserMutation } from '@/store/admin/user-management';
 import { useRouter } from 'next/navigation';
 import useToaster from '@/components/hooks/useToaster';
-import FormSelect from '@/Forms/FormSelect';
+import FormSelect from '@/components/Forms/FormSelect';
 
 const UserCreate = () => {
     const router = useRouter()

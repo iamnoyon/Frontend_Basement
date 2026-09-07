@@ -3,7 +3,7 @@
 import CardLayout from '@/components/common/CardLayout';
 import React, { useEffect } from 'react';
 import { ShieldCheck } from "lucide-react";
-import Formwrapper from '@/Forms/Formwrapper';
+import Formwrapper from '@/components/Forms/Formwrapper';
 import { useGetPermissionsByUserIdQuery, useUpdatePermissionsByUserIdMutation } from '@/store/admin/user-management';
 import { useParams, useRouter } from 'next/navigation';
 import useToaster from '@/components/hooks/useToaster';

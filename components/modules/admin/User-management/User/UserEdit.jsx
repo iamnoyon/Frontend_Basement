@@ -5,13 +5,13 @@ import React, { useEffect } from 'react'
 import { User } from "lucide-react";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userUpdateSchema } from './schema';
-import Formwrapper from '@/Forms/Formwrapper';
-import FormInput from '@/Forms/FormInput';
+import Formwrapper from '@/components/Forms/Formwrapper';
+import FormInput from '@/components/Forms/FormInput';
 import { useForm } from 'react-hook-form';
 import { useGetUserInfoByIdQuery, useUpdateUserInfoMutation } from '@/store/admin/user-management';
 import { useParams, useRouter } from 'next/navigation';
 import useToaster from '@/components/hooks/useToaster';
-import FormSelect from '@/Forms/FormSelect';
+import FormSelect from '@/components/Forms/FormSelect';
 import { useSelector } from 'react-redux';
 import Swal from "sweetalert2";
 
