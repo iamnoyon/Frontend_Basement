@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { useRouter, useSearchParams } from "next/navigation";
+import ProfileInfo from "./ProfileInfo";
 
 export default function ProfilePage() {
     const tran_id = useSearchParams().get("tran_id");
@@ -37,27 +38,6 @@ export default function ProfilePage() {
     const [ChangePassword] = useChangePasswordMutation()
     const [UploadProfilePhoto] = useSingleFileUploadMutation()
     const [UpdateProfile] = useUpdateProfileMutation()
-    const { data: paymentStatus } = useCheckPaymentStatusQuery({tran_id}, {skip: !tran_id})
-
-    useEffect(()=>{
-        if(paymentStatus?.data?.status === "success"){
-            Swal.fire({
-                title: "Payment Successful!",
-                text: "Your payment has been processed successfully.",
-                icon: "success",
-                confirmButtonColor: "#043570",
-                confirmButtonText: "OK",
-                didOpen: (popup) => {
-                    const icon = popup.querySelector(".swal2-icon");
-                    if (icon) icon.style.transform = "scale(0.7)";
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    router.replace("/profile");
-                }
-            });
-        }
-    }, [paymentStatus])
 
 
     const handleImageChange = (e) => {
