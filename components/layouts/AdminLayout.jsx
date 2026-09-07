@@ -43,7 +43,7 @@ export default function AdminLayout({ children }) {
                 <Topbar onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
 
                 {/* Page Content */}
-                <main className="flex-1 overflow-y-auto px-3 py-5">{children}</main>
+                <main className="flex-1 overflow-y-auto px-3 py-5 bg-gray-200">{children}</main>
             </div>
         </div>
     );
