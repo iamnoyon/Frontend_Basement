@@ -2,8 +2,11 @@
 'use client';
 import Link from "next/link";
 import { ArrowLeft, Home, SearchX } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function PublicNotFound() {
+  const { data: session } = useSession();
+  
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-6">
       <div className="w-full max-w-lg text-center">
@@ -30,13 +33,23 @@ export default function PublicNotFound() {
 
         {/* Actions */}
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 sm:w-auto"
-          >
-            <Home className="h-4 w-4" />
-            Go to Homepage
-          </Link>
+          {session ? (
+            <Link
+              href="/dashboard"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 sm:w-auto"
+            >
+              <Home className="h-4 w-4" />
+              Go to Dashboard
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 sm:w-auto"
+            >
+              <Home className="h-4 w-4" />
+              Go to Homepage
+            </Link>
+          )}
         </div>
       </div>
     </main>
