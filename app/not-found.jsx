@@ -1,7 +1,7 @@
 // app/not-found.tsx
 'use client';
 import Link from "next/link";
-import { ArrowLeft, Home, SearchX } from "lucide-react";
+import { ArrowLeft, Home, LayoutDashboard, SearchX } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 export default function PublicNotFound() {
@@ -38,7 +38,7 @@ export default function PublicNotFound() {
               href="/dashboard"
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 sm:w-auto"
             >
-              <Home className="h-4 w-4" />
+              <LayoutDashboard className="h-4 w-4" />
               Go to Dashboard
             </Link>
           ) : (
