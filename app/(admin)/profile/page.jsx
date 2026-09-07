@@ -1,5 +1,5 @@
 import Loading from '@/components/common/Loading'
-import ProfilePage from '@/components/modules/Profile/ProfilePage'
+import ProfilePage from '@/components/modules/admin/Profile/ProfilePage'
 import React, { Suspense } from 'react'
 
 const page = () => {

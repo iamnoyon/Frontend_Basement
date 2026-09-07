@@ -1,11 +1,11 @@
-import Loading from '@/components/common/Loading'
-import RenderDashboard from '@/components/modules/admin/AdminDashboard/RenderDashboard'
 import React, { Suspense } from 'react'
+import Loading from '@/components/common/Loading'
+import FallbackDashboard from '@/components/modules/admin/AdminDashboard/FallbackDashboard'
 
 const page = () => {
   return (
     <Suspense fallback={<Loading />}>
-      <RenderDashboard />
+      <FallbackDashboard />
     </Suspense>
   )
 }

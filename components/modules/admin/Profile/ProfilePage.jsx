@@ -6,14 +6,12 @@ import { useChangePasswordMutation, useUpdateProfileMutation } from "@/store/aut
 import {
     User,
     Building2,
-    Receipt,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import ProfileInfo from "./ProfileInfo";
 import BusinessInfo from "./BusinessInfo";
-import BillingInfo from "./BillingInfo";
 import { useCheckPaymentStatusQuery } from "@/store/admin/package";
 import { useRouter, useSearchParams } from "next/navigation";
 
