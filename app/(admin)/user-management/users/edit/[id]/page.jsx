@@ -1,5 +1,5 @@
 import Loading from '@/components/common/Loading'
-import UserEdit from '@/components/modules/User-management/User/UserEdit'
+import UserEdit from '@/components/modules/admin/User-management/User/UserEdit'
 import UserPermissionUpdate from '@/components/modules/admin/User-management/User/UserPermissionUpdate'
 import React, { Suspense } from 'react'
 
