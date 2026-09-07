@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { performLogout } from "@/utils/logout";
-import { breadcrumbData } from "./breadcurmb";
+import { breadcrumbData } from "./menuItems";
 
 const idEncrypted = false; // Set to true if you want to encrypt the ID in the breadcrumb
 
@@ -87,7 +87,7 @@ export default function Topbar({ onMenuToggle }) {
 
                 <nav
                     aria-label="Breadcrumb"
-                    className="flex min-w-0 items-center overflow-hidden"
+                    className="min-w-0 items-center overflow-hidden hidden md:flex"
                 >
                     {breadcrumbItems.length > 0 ? (
                         breadcrumbItems.map((item, index) => {
