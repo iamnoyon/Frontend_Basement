@@ -10,9 +10,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import ProfileInfo from "./ProfileInfo";
-import BusinessInfo from "./BusinessInfo";
-import { useCheckPaymentStatusQuery } from "@/store/admin/package";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ProfilePage() {
@@ -193,15 +190,6 @@ export default function ProfilePage() {
                         handleChangePassword={handleChangePassword}
                     />
                 )}
-
-                {activeTab === "business" && (
-                    <BusinessInfo user={user} />
-                )}
-
-                {/* {activeTab === "billing" && (
-                    <BillingInfo user={user} statusColor={statusColor} />
-                )} */}
-
             </div>
         </div>
     );
