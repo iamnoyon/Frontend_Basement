@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
 const protectedRoutes = [
@@ -5,21 +6,31 @@ const protectedRoutes = [
   "/profile",
 ];
 
-export function proxy(request) {
-  const sessionToken = request.cookies.get("authjs.session-token")?.value
-    || request.cookies.get("__Secure-authjs.session-token")?.value;
-  const path = request.nextUrl.pathname;
+export default auth((request) => {
+  const { pathname } = request.nextUrl;
 
-  const isProtected = protectedRoutes.some((route) =>
-    path.startsWith(route)
+  const isProtectedRoute = protectedRoutes.some(
+    (route) =>
+      pathname === route || pathname.startsWith(`${route}/`)
   );
 
-  if (!sessionToken && isProtected) {
-    return NextResponse.redirect(new URL("/", request.url));
+  // Not a protected route
+  if (!isProtectedRoute) {
+    return NextResponse.next();
+  }
+
+  // Auth.js did not find a valid authenticated session
+  if (!request.auth) {
+    const loginUrl = new URL("/", request.url);
+
+    // Optional: remember where the user wanted to go
+    loginUrl.searchParams.set("callbackUrl", pathname);
+
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [

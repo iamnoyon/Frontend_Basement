@@ -1,4 +1,3 @@
 export const siteConfig = {
-    // baseUrl: "http://localhost:8001/api"
-    baseUrl: "https://resturant-backend-3khk.onrender.com/api"
+    baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8001/api",
 }

@@ -2,45 +2,49 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
 import { setUser, setToken } from "@/store/user";
 import { useProfileQuery } from "@/store/auth";
 import { performLogout } from "@/utils/logout";
 
 export default function SessionSync() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const dispatch = useDispatch();
-  const reduxToken = useSelector((state) => state?.user?.token);
 
-  // Use session token directly (synchronous) instead of Redux token (async)
-  const token = session?.user?.backendToken || reduxToken;
+  // Get backend token from NextAuth session
+  const token = session?.user?.backendToken;
 
-  // Restore token from sessionStorage on mount (cross-tab support)
+  // Sync NextAuth token → Redux
   useEffect(() => {
-    if (!reduxToken) {
-      const stored = sessionStorage.getItem("backend_token");
-      if (stored) {
-        dispatch(setToken(stored));
-      }
+    if (status === "authenticated" && token) {
+      dispatch(setToken(token));
     }
-  }, [reduxToken, dispatch]);
 
-  // Set token from session + persist to sessionStorage
-  useEffect(() => {
-    if (session?.user?.backendToken) {
-      dispatch(setToken(session.user.backendToken));
-      sessionStorage.setItem("backend_token", session.user.backendToken);
+    // Clear Redux token when logged out
+    if (status === "unauthenticated") {
+      dispatch(setToken(null));
     }
-  }, [session, dispatch]);
+  }, [status, token, dispatch]);
 
-  const { data: profileData, isError } = useProfileQuery(token, { skip: !token });
+  // Profile API
+  // RTK Query will get the token from Redux automatically
+  const {
+    data: profileData,
+    isError,
+    error,
+  } = useProfileQuery(undefined, {
+    skip: status !== "authenticated",
+  });
 
+  // Store profile/user in Redux
   useEffect(() => {
     if (profileData?.data) {
       dispatch(setUser(profileData.data));
     }
   }, [profileData, dispatch]);
 
+  // Logout only when authentication fails
   useEffect(() => {
     if (isError && token) {
       performLogout();
@@ -49,3 +53,4 @@ export default function SessionSync() {
 
   return null;
 }
+
