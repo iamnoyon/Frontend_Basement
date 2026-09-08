@@ -4,13 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { menuItems } from "./menuItems";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function Sidebar({ onNavClick, hideToggle }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
+  const [showText, setShowText] = useState(!collapsed);
+
   const userPermissions = useSelector((state) => state?.user?.permissions) || [];
   const user = useSelector((state) => state?.user);
   const userRole = user?.role || '';
@@ -54,6 +56,19 @@ export default function Sidebar({ onNavClick, hideToggle }) {
     onNavClick?.();
   };
 
+
+  useEffect(() => {
+    if (collapsed) {
+      setShowText(false);
+    } else {
+      const timer = setTimeout(() => {
+        setShowText(true);
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [collapsed]);
+
   return (
     <aside
       className={`flex h-full w-full flex-col border-r bg-[#02162e] transition-all duration-300 ${collapsed ? "lg:w-20" : "lg:w-70"
@@ -61,19 +76,19 @@ export default function Sidebar({ onNavClick, hideToggle }) {
     >
       {/* Header */}
       <div className={`relative flex h-16 items-center ${collapsed ? "px-2" : "px-6"}`}>
-        {!collapsed && (
-          user?.business?.businessName ? (
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold tracking-tight text-[#C98A4A]">
-                {user.business.businessName}
-              </h1>
-            </div>
+        {showText && (
+          !user?.business?.businessName ? (
+            <h1 className="text-xl font-semibold tracking-tight text-[#C98A4A]">
+              {user.business.businessName}
+            </h1>
           ) : (
-            <div className="flex items-center">
-              <h1 className="text-2xl font-extrabold tracking-tight">
-                <span className="text-white">Cloud</span>
-              </h1>
-              <span className="text-2xl font-extrabold tracking-tight text-[#C98A4A]">Cafe</span>
+            <div className="flex items-center gap-1">
+              <span className="text-2xl font-extrabold tracking-tight text-white">
+                Cloud
+              </span>
+              <span className="text-2xl font-extrabold tracking-tight text-[#C98A4A]">
+                Cafe
+              </span>
             </div>
           )
         )}
