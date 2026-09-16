@@ -33,11 +33,11 @@ const FormFieldArray = ({
   return (
     <div className={`w-full ${wrapperClass}`}>
       {label && (
-        <label className={`mb-1 block text-sm font-medium text-gray-800 ${labelClass}`}>
+        <label className={`mb-1 block text-sm font-medium text-[var(--color-gray-800)] ${labelClass}`}>
           {label}
 
           {required && (
-            <span className="ml-1 text-red-700">*</span>
+            <span className="ml-1 text-[var(--color-red-700)]">*</span>
           )}
         </label>
       )}
@@ -50,19 +50,19 @@ const FormFieldArray = ({
               placeholder={placeholder || `${label || name} ${index + 1}`}
               disabled={disabled}
               className={`
-                w-full text-gray-800 rounded-md border px-2 py-2 outline-none
-                focus:ring-1 focus:ring-black/40
-                disabled:bg-gray-100
-                ${errors[name]?.[index] ? "border-red-500" : "border-gray-300"}
+                w-full text-[var(--color-gray-800)] rounded-md border px-2 py-2 outline-none
+                focus:ring-1 focus:ring-[var(--color-ring-black-40)]
+                disabled:bg-[var(--color-gray-100)]
+                ${errors[name]?.[index] ? "border-[var(--color-red-500)]" : "border-[var(--color-gray-300)]"}
                 ${inputClass}
               `}
             />
             {!disabled && (
-              <button
-                type="button"
-                onClick={() => remove(index)}
-                className="shrink-0 rounded-md bg-red-500 px-3 py-2 text-sm text-white hover:bg-red-600 cursor-pointer"
-              >
+<button
+              type="button"
+              onClick={() => remove(index)}
+              className="shrink-0 rounded-md bg-[var(--color-red-500)] px-3 py-2 text-sm text-[var(--color-white)] hover:bg-[var(--color-red-600)] cursor-pointer"
+            >
                 ✕
               </button>
             )}
@@ -74,20 +74,20 @@ const FormFieldArray = ({
         <button
           type="button"
           onClick={() => append(defaultValue)}
-          className="mt-2 rounded-md border border-[#043570] px-4 py-1.5 text-sm text-[#043570] hover:bg-[#043570] hover:text-white cursor-pointer"
+          className="mt-2 rounded-md border border-[var(--color-primary)] px-4 py-1.5 text-sm text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] cursor-pointer"
         >
           {addButtonText}
         </button>
       )}
 
       {remark && (
-        <p className={`mt-1 ml-3 text-xs text-gray-500 ${remarkClass}`}>
+        <p className={`mt-1 ml-3 text-xs text-[var(--color-gray-500)] ${remarkClass}`}>
           {remark}
         </p>
       )}
 
       {errors[name] && !Array.isArray(errors[name]) && (
-        <p className="mt-1 text-sm text-red-500">
+        <p className="mt-1 text-sm text-[var(--color-red-500)]">
           {errors[name]?.message}
         </p>
       )}

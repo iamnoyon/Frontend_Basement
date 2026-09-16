@@ -46,7 +46,7 @@ const AdminCharts = () => {
                 <ReactBarChart
                     title={`Net Profit (${chartData?.data?.labels[0]?.split('-')[0]})`}
                     xKey='monthName'
-                    color='#249D8F'
+                    color='var(--color-chart-profit)'
                     data={chartData?.data?.netProfitPerMonth || []}
                     loading={chartLoading}
                 />

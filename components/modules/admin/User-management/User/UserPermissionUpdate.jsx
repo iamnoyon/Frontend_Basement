@@ -43,8 +43,8 @@ const UserPermissionUpdate = () => {
             width: "350px",
             padding: "1.25rem",
             showCancelButton: true,
-            confirmButtonColor: "#043570",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "var(--color-primary)",
+            cancelButtonColor: "var(--color-danger-swal)",
             confirmButtonText: "Yes, update",
             cancelButtonText: "Cancel",
             didOpen: (popup) => {
@@ -76,7 +76,7 @@ const UserPermissionUpdate = () => {
             titleIcon={ShieldCheck}
         >
             <Formwrapper methods={methods} onSubmit={onSubmit}>
-                <p className="mb-5 text-sm text-gray-500">
+                <p className="mb-5 text-sm text-[var(--color-gray-500)]">
                     Select the permissions you want to assign to this user.
                 </p>
 
@@ -103,14 +103,14 @@ const UserPermissionUpdate = () => {
                                         key={optionValue}
                                         onClick={handleToggle}
                                         className={`flex items-center gap-3 rounded-xl border p-3 transition-all duration-200 cursor-pointer select-none
-                                            ${isSelected ? "border-black bg-gray-50" : "border-gray-200 bg-white hover:border-black"}`}
+                                            ${isSelected ? "border-[var(--color-black)] bg-[var(--color-gray-50)]" : "border-[var(--color-gray-200)] bg-[var(--color-white)] hover:border-[var(--color-black)]"}`}
                                     >
                                         <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-all
-                                            ${isSelected ? "border-black" : "border-gray-300"}`}
+                                            ${isSelected ? "border-[var(--color-black)]" : "border-[var(--color-gray-300)]"}`}
                                         >
-                                            {isSelected && <div className="h-2.5 w-2.5 rounded-full bg-black" />}
+                                            {isSelected && <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-black)]" />}
                                         </div>
-                                        <span className="text-sm text-gray-700">{optionLabel}</span>
+                                        <span className="text-sm text-[var(--color-gray-700)]">{optionLabel}</span>
                                     </div>
                                 );
                             })}
@@ -122,13 +122,13 @@ const UserPermissionUpdate = () => {
                     <button
                         type="button"
                         onClick={() => router.push("/user-management/users")}
-                        className="w-40 hover:cursor-pointer hover:bg-[#0A4D99] rounded font-semibold py-2 border text-[#0A4D99] hover:text-white border-[#0A4D99]"
+                        className="w-40 hover:cursor-pointer hover:bg-[var(--color-primary-light)] rounded font-semibold py-2 border text-[var(--color-primary-light)] hover:text-[var(--color-white)] border-[var(--color-primary-light)]"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="w-40 hover:cursor-pointer hover:bg-[#053872] rounded font-semibold py-2 bg-[#0A4D99] text-white"
+                        className="w-40 hover:cursor-pointer hover:bg-[var(--color-primary-button-hover)] rounded font-semibold py-2 bg-[var(--color-primary-light)] text-[var(--color-white)]"
                     >
                         Save
                     </button>

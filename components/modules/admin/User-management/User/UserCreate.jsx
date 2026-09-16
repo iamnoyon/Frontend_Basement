@@ -90,8 +90,8 @@ const UserCreate = () => {
                     />
                 </div>
                 <div className='flex items-center justify-center gap-10 mt-20'>
-                    <button type='button' onClick={() => router.push("/user-management/users")} className='w-40 hover:cursor-pointer hover:bg-[#0A4D99] rounded font-semibold py-2 border text-[#0A4D99] hover:text-white border-[#0A4D99]'>Cancel</button>
-                    <button type="submit" className='w-40 hover:cursor-pointer hover:bg-[#053872] rounded font-semibold py-2  bg-[#0A4D99] text-white'>Save</button>
+                    <button type='button' onClick={() => router.push("/user-management/users")} className='w-40 hover:cursor-pointer hover:bg-[var(--color-primary-light)] rounded font-semibold py-2 border text-[var(--color-primary-light)] hover:text-[var(--color-white)] border-[var(--color-primary-light)]'>Cancel</button>
+                    <button type="submit" className='w-40 hover:cursor-pointer hover:bg-[var(--color-primary-button-hover)] rounded font-semibold py-2  bg-[var(--color-primary-light)] text-[var(--color-white)]'>Save</button>
                 </div>
             </Formwrapper>
         </CardLayout>

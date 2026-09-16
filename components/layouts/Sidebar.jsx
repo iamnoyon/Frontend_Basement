@@ -71,23 +71,23 @@ export default function Sidebar({ onNavClick, hideToggle }) {
 
   return (
     <aside
-      className={`flex h-full w-full flex-col border-r bg-[#02162e] transition-all duration-300 ${collapsed ? "lg:w-20" : "lg:w-70"
+      className={`flex h-full w-full flex-col border-r bg-[var(--color-primary-dark)] transition-all duration-300 ${collapsed ? "lg:w-20" : "lg:w-70"
         }`}
     >
       {/* Header */}
       <div className={`relative flex h-16 items-center ${collapsed ? "px-2" : "px-6"}`}>
         {showText && (
           !user?.business?.businessName ? (
-            <h1 className="text-xl font-semibold tracking-tight text-[#C98A4A]">
+            <h1 className="text-xl font-semibold tracking-tight text-[var(--color-accent)]">
               {user?.business?.businessName}
             </h1>
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-2xl font-extrabold tracking-tight text-white">
-                Cloud
+              <span className="text-2xl font-extrabold tracking-tight text-[var(--color-white)]">
+                Admin
               </span>
-              <span className="text-2xl font-extrabold tracking-tight text-[#C98A4A]">
-                Cafe
+              <span className="text-2xl font-extrabold tracking-tight text-[var(--color-accent)]">
+                Panel
               </span>
             </div>
           )
@@ -96,14 +96,14 @@ export default function Sidebar({ onNavClick, hideToggle }) {
         {!hideToggle && (
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="absolute right-6 rounded-lg p-2 text-white transition hover:cursor-pointer hover:text-gray-300"
+            className="absolute right-6 rounded-lg p-2 text-[var(--color-white)] transition hover:cursor-pointer hover:text-[var(--color-gray-300)]"
           >
             {collapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
           </button>
         )}
       </div>
 
-      <div className="border-b border-[#052950]" />
+      <div className="border-b border-[var(--color-primary-border)]" />
 
       {/* Menu */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
@@ -127,8 +127,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
                     onClick={() => toggleMenu(item.name)}
                     className={`flex w-full items-center justify-between rounded-xl py-3 text-sm font-medium transition-all hover:cursor-pointer ${collapsed ? "justify-center px-2" : "px-4"
                       } ${isActive
-                        ? "bg-[#063C76] text-white shadow-md"
-                        : "text-gray-300 hover:bg-[#063C76]"
+                        ? "bg-[var(--color-primary-hover)] text-[var(--color-white)] shadow-md"
+                        : "text-[var(--color-gray-300)] hover:bg-[var(--color-primary-hover)]"
                       }`}
                   >
                     <span className="flex items-center gap-3">
@@ -153,8 +153,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
                     onClick={handleNavClick}
                     className={`flex items-center gap-3 rounded-xl py-3 text-sm font-medium transition-all ${collapsed ? "justify-center px-2" : "px-4"
                       } ${isActive
-                        ? "bg-[#063C76] text-white shadow-md"
-                        : "text-gray-300 hover:bg-[#063C76]"
+                        ? "bg-[var(--color-primary-hover)] text-[var(--color-white)] shadow-md"
+                        : "text-[var(--color-gray-300)] hover:bg-[var(--color-primary-hover)]"
                       }`}
                   >
                     <Icon size={20} />
@@ -178,8 +178,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
                             href={child.path}
                             onClick={handleNavClick}
                             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition ${childActive
-                              ? "bg-[#0A4D99] text-white"
-                              : "text-gray-400 hover:bg-[#063C76]"
+                              ? "bg-[var(--color-primary-light)] text-[var(--color-white)]"
+                              : "text-[var(--color-gray-400)] hover:bg-[var(--color-primary-hover)]"
                               }`}
                           >
                             {ChildIcon && <ChildIcon size={16} />}
@@ -199,8 +199,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
 
       {/* Footer */}
       {!collapsed && (
-        <div className="border-t border-[#052950] p-4">
-          <p className="text-center text-xs text-gray-400">© 2026 <span className="text-[#C98A4A]">cloudcafe</span></p>
+        <div className="border-t border-[var(--color-primary-border)] p-4">
+          <p className="text-center text-xs text-[var(--color-gray-400)]">© 2026 <span className="text-[var(--color-accent)]">cloudcafe</span></p>
         </div>
       )}
     </aside>

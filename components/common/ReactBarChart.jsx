@@ -8,7 +8,7 @@ export default function ReactBarChart({
     xKey = "month",
     yKey = "amount",
     title = "",
-    color = "#8B1E2D",
+    color = "var(--color-chart-bar)",
     height = 320,
     className = "",
     formatter,
@@ -42,7 +42,7 @@ export default function ReactBarChart({
                     textStyle: {
                         fontSize: 14,
                         fontWeight: 600,
-                        color: "#111827",
+                        color: "var(--color-text-primary)",
                         fontFamily: "Manrope, sans-serif",
                     },
                 }
@@ -53,9 +53,9 @@ export default function ReactBarChart({
                 axisPointer: {
                     type: "shadow",
                 },
-                backgroundColor: "rgba(17, 24, 39, 0.9)",
+                backgroundColor: "var(--color-tooltip-bg)",
                 textStyle: {
-                    color: "#fff",
+                    color: "var(--color-white)",
                     fontFamily: "Manrope, sans-serif",
                 },
                 formatter:
@@ -79,7 +79,7 @@ export default function ReactBarChart({
                 data: labels,
 
                 axisLabel: {
-                    color: "#374151",
+                    color: "var(--color-text-body)",
                     fontSize: 12,
                     fontFamily: "Manrope, sans-serif",
                     rotate: 0,
@@ -87,7 +87,7 @@ export default function ReactBarChart({
 
                 axisLine: {
                     lineStyle: {
-                        color: "#e5e7eb",
+                        color: "var(--color-border)",
                     },
                 },
 
@@ -100,7 +100,7 @@ export default function ReactBarChart({
                 nameGap: 26,
 
                 nameTextStyle: {
-                    color: "#1f2937",
+                    color: "var(--color-text-heading)",
                     fontSize: 13,
                     fontFamily: "Manrope, sans-serif",
                 },
@@ -110,27 +110,27 @@ export default function ReactBarChart({
                 type: "value",
 
                 axisLabel: {
-                    color: "#374151",
+                    color: "var(--color-text-body)",
                     fontSize: 12,
                     fontFamily: "Manrope, sans-serif",
                 },
 
                 axisLine: {
                     lineStyle: {
-                        color: "#e5e7eb",
+                        color: "var(--color-border)",
                     },
                 },
 
                 splitLine: {
                     lineStyle: {
-                        color: "#f3f4f6",
+                        color: "var(--color-bg-muted)",
                     },
                 },
 
                 name: yAxisName,
 
                 nameTextStyle: {
-                    color: "#1f2937",
+                    color: "var(--color-text-heading)",
                     fontSize: 13,
                     fontFamily: "Manrope, sans-serif",
                 },
@@ -157,7 +157,7 @@ export default function ReactBarChart({
                         itemStyle: {
                             shadowBlur: 10,
                             shadowColor:
-                                "rgba(59, 130, 246, 0.35)",
+                                "var(--color-shadow-blue)",
                         },
                     },
 
@@ -205,10 +205,10 @@ export default function ReactBarChart({
             style={{
                 width: "100%",
                 height,
-                backgroundColor: "#fff",
+                backgroundColor: "var(--color-white)",
                 borderRadius: 12,
                 boxShadow:
-                    "0 2px 8px rgba(15, 23, 42, 0.08)",
+                    "0 2px 8px var(--color-shadow-slate)",
                 padding: 8,
             }}
         >
@@ -216,26 +216,26 @@ export default function ReactBarChart({
                 <div className="absolute inset-0 animate-pulse p-5">
                     {/* Title skeleton */}
                     {title && (
-                        <div className="mb-5 h-4 w-32 rounded bg-gray-200" />
+                        <div className="mb-5 h-4 w-32 rounded bg-[var(--color-gray-200)]" />
                     )}
 
                     {/* Chart area */}
                     <div className="flex h-[calc(100%-45px)] items-end justify-between gap-3 px-4 pb-8">
-                        <div className="h-[35%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[55%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[45%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[70%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[50%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[80%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[60%] w-7 rounded-t bg-gray-200" />
-                        <div className="h-[40%] w-7 rounded-t bg-gray-200" />
+                        <div className="h-[35%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[55%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[45%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[70%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[50%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[80%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[60%] w-7 rounded-t bg-[var(--color-gray-200)]" />
+                        <div className="h-[40%] w-7 rounded-t bg-[var(--color-gray-200)]" />
                     </div>
 
                     {/* X-axis skeleton */}
-                    <div className="absolute bottom-4 left-8 right-8 h-px bg-gray-200" />
+                    <div className="absolute bottom-4 left-8 right-8 h-px bg-[var(--color-gray-200)]" />
 
                     {/* Y-axis skeleton */}
-                    <div className="absolute bottom-8 left-5 top-14 w-px bg-gray-200" />
+                    <div className="absolute bottom-8 left-5 top-14 w-px bg-[var(--color-gray-200)]" />
                 </div>
             ) : (
                 <div

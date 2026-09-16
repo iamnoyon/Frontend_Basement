@@ -52,8 +52,8 @@ const UserEdit = () => {
             width: "350px",
             padding: "1.25rem",
             showCancelButton: true,
-            confirmButtonColor: "#043570",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "var(--color-primary)",
+            cancelButtonColor: "var(--color-danger-swal)",
             confirmButtonText: "Yes, update",
             cancelButtonText: "Cancel",
             didOpen: (popup) => {
@@ -116,8 +116,8 @@ const UserEdit = () => {
                     />
                 </div>
                 <div className='flex items-center justify-center gap-10 mt-20'>
-                    <button type='button' onClick={() => router.push("/user-management/users")} className='w-40 hover:cursor-pointer hover:bg-[#0A4D99] rounded font-semibold py-2 border text-[#0A4D99] hover:text-white border-[#0A4D99]'>Cancel</button>
-                    <button type="submit" className='w-40 hover:cursor-pointer hover:bg-[#053872] rounded font-semibold py-2  bg-[#0A4D99] text-white'>Update</button>
+                    <button type='button' onClick={() => router.push("/user-management/users")} className='w-40 hover:cursor-pointer hover:bg-[var(--color-primary-light)] rounded font-semibold py-2 border text-[var(--color-primary-light)] hover:text-[var(--color-white)] border-[var(--color-primary-light)]'>Cancel</button>
+                    <button type="submit" className='w-40 hover:cursor-pointer hover:bg-[var(--color-primary-button-hover)] rounded font-semibold py-2  bg-[var(--color-primary-light)] text-[var(--color-white)]'>Update</button>
                 </div>
             </Formwrapper>
         </CardLayout>

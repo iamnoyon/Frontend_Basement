@@ -35,11 +35,11 @@ const FormTextEditor = ({
       {label && (
         <label
           htmlFor={name}
-          className={`mb-1 block text-sm font-medium text-gray-800 ${labelClass}`}
+          className={`mb-1 block text-sm font-medium text-[var(--color-gray-800)] ${labelClass}`}
         >
           {label}
           {required && (
-            <span className="ml-1 text-red-700">*</span>
+            <span className="ml-1 text-[var(--color-red-700)]">*</span>
           )}
         </label>
       )}
@@ -56,7 +56,7 @@ const FormTextEditor = ({
           <div
             className={`
               rounded-md overflow-hidden
-              ${errors[name] ? "border border-red-500" : "border border-gray-300"}
+              ${errors[name] ? "border border-[var(--color-red-500)]" : "border border-[var(--color-gray-300)]"}
               ${editorClass}
             `}
           >
@@ -66,7 +66,7 @@ const FormTextEditor = ({
               onChange={field.onChange}
               placeholder={placeholder}
               readOnly={disabled}
-              className="text-black"
+              className="text-[var(--color-black)]"
             />
           </div>
         )}
@@ -74,14 +74,14 @@ const FormTextEditor = ({
 
       {remark && (
         <p
-          className={`mt-1 ml-3 text-xs text-gray-500 ${remarkClass}`}
+          className={`mt-1 ml-3 text-xs text-[var(--color-gray-500)] ${remarkClass}`}
         >
           {remark}
         </p>
       )}
 
       {errors[name] && (
-        <p className="mt-1 text-sm text-red-500">
+        <p className="mt-1 text-sm text-[var(--color-red-500)]">
           {errors[name]?.message}
         </p>
       )}

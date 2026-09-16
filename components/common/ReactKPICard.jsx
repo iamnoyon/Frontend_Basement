@@ -1,27 +1,27 @@
 "use client";
 
 const STATUS_COLORS = {
-    healthy: "#16A34A",
-    unhealthy: "#EF4444",
-    degraded: "#F59E0B",
-    warning: "#F59E0B",
-    critical: "#EF4444",
-    ok: "#16A34A",
-    down: "#EF4444",
+    healthy: "var(--color-success)",
+    unhealthy: "var(--color-danger)",
+    degraded: "var(--color-warning)",
+    warning: "var(--color-warning)",
+    critical: "var(--color-danger)",
+    ok: "var(--color-success)",
+    down: "var(--color-danger)",
 };
 
 function getValueColor(item) {
     if (item.color) return item.color;
     if (typeof item.value === "string") {
         const key = item.value.toLowerCase();
-        return STATUS_COLORS[key] || "#6b7280";
+        return STATUS_COLORS[key] || "var(--color-text-muted)";
     }
     if (typeof item.value === "number") {
-        if (item.value >= 90) return "#EF4444";
-        if (item.value >= 70) return "#F59E0B";
-        return "#16A34A";
+        if (item.value >= 90) return "var(--color-danger)";
+        if (item.value >= 70) return "var(--color-warning)";
+        return "var(--color-success)";
     }
-    return "#6b7280";
+    return "var(--color-text-muted)";
 }
 
 function renderValue(item) {
@@ -50,9 +50,9 @@ export default function ReactKPICard({
             style={{
                 width: "100%",
                 height,
-                backgroundColor: "#fff",
+                backgroundColor: "var(--color-white)",
                 borderRadius: 12,
-                boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
+                boxShadow: "0 2px 8px var(--color-shadow-slate)",
                 padding: 20,
             }}
         >
@@ -61,7 +61,7 @@ export default function ReactKPICard({
                     style={{
                         fontSize: 14,
                         fontWeight: 600,
-                        color: "#111827",
+                        color: "var(--color-text-primary)",
                         marginBottom: 16,
                     }}
                 >
@@ -83,8 +83,8 @@ export default function ReactKPICard({
                             style={{
                                 padding: 14,
                                 borderRadius: 10,
-                                backgroundColor: "#f9fafb",
-                                border: "1px solid #f3f4f6",
+                                backgroundColor: "var(--color-bg-subtle)",
+                                border: "1px solid var(--color-bg-muted)",
                             }}
                         >
                             <div className="mb-2 flex items-center gap-2">
@@ -93,7 +93,7 @@ export default function ReactKPICard({
                                         width: 12,
                                         height: 12,
                                         borderRadius: "50%",
-                                        backgroundColor: "#e5e7eb",
+                                        backgroundColor: "var(--color-border)",
                                     }}
                                 />
                                 <div
@@ -101,7 +101,7 @@ export default function ReactKPICard({
                                         width: "60%",
                                         height: 12,
                                         borderRadius: 4,
-                                        backgroundColor: "#e5e7eb",
+                                        backgroundColor: "var(--color-border)",
                                     }}
                                 />
                             </div>
@@ -110,7 +110,7 @@ export default function ReactKPICard({
                                     width: "40%",
                                     height: 20,
                                     borderRadius: 4,
-                                    backgroundColor: "#e5e7eb",
+                                    backgroundColor: "var(--color-border)",
                                     marginLeft: 20,
                                 }}
                             />
@@ -133,8 +133,8 @@ export default function ReactKPICard({
                                 style={{
                                     padding: 14,
                                     borderRadius: 10,
-                                    backgroundColor: "#f9fafb",
-                                    border: `1px solid ${color}20`,
+                                    backgroundColor: "var(--color-bg-subtle)",
+                                    border: `1px solid ${color}`,
                                     borderLeft: `3px solid ${color}`,
                                 }}
                             >
@@ -152,7 +152,7 @@ export default function ReactKPICard({
                                     <span
                                         style={{
                                             fontSize: 12,
-                                            color: "#6b7280",
+                                            color: "var(--color-text-muted)",
                                         }}
                                     >
                                         {item.name}

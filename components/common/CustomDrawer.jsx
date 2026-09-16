@@ -30,19 +30,19 @@ const CustomDrawer = ({
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
       <div
-        className="absolute inset-0 bg-black/40 transition-opacity duration-300"
+        className="absolute inset-0 bg-[var(--color-overlay-black-40)] transition-opacity duration-300"
         onClick={onClose}
       />
       <div
-        className={`relative w-full ${width} bg-white shadow-2xl h-full flex flex-col transform transition-transform duration-300 ${visible ? "translate-x-0" : "translate-x-full"}`}
+        className={`relative w-full ${width} bg-[var(--color-white)] shadow-2xl h-full flex flex-col transform transition-transform duration-300 ${visible ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
-          <h3 className="text-lg font-semibold text-[#043570]">{title}</h3>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-gray-100)] shrink-0">
+          <h3 className="text-lg font-semibold text-[var(--color-primary)]">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+            className="p-1 rounded-lg hover:bg-[var(--color-gray-100)] transition-colors cursor-pointer"
           >
-            <X size={20} className="text-gray-500" />
+            <X size={20} className="text-[var(--color-gray-500)]" />
           </button>
         </div>
 

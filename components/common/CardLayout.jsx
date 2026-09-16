@@ -28,14 +28,14 @@ export default function CardLayout({
 
     return (
         <div
-            className={`w-full border min-h-full border-gray-200 rounded-lg bg-white ${className}`}
+            className={`w-full border min-h-full border-[var(--color-gray-200)] rounded-lg bg-[var(--color-white)] ${className}`}
         >
             {/* Header */}
-            <div className="flex items-center justify-between bg-[#043570] px-4 py-3 border-b rounded-t-lg">
+            <div className="flex items-center justify-between bg-[var(--color-primary)] px-4 py-3 border-b rounded-t-lg">
                 {/* Left: Title */}
                 <div className="flex items-center gap-2">
-                    {titleIcon && <TitleIcon className='text-white' size={22} />}
-                    <div className="text-lg xl:text-xl text-white">
+                    {titleIcon && <TitleIcon className='text-[var(--color-white)]' size={22} />}
+                    <div className="text-lg xl:text-xl text-[var(--color-white)]">
                         {title}
                     </div>
                 </div>
@@ -46,7 +46,7 @@ export default function CardLayout({
                         <div className="flex items-center gap-2">
                             <NextLink
                                 href={buttonHref || ''}
-                                className="bg-white text-[#02162e] flex items-center gap-1 px-3 py-1 text-base rounded hover:bg-amber-100"
+                                className="bg-[var(--color-white)] text-[var(--color-primary-dark)] flex items-center gap-1 px-3 py-1 text-base rounded hover:bg-[var(--color-amber-100)]"
                             >
                                 {buttonIcon && <ButtonIcon size={20} />}
                                 <span>{buttonText}</span>

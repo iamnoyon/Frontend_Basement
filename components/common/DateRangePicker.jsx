@@ -120,24 +120,24 @@ const DateRangePicker = ({
   const dropdown = (
     <div
       ref={menuRef}
-      className="fixed z-[9999] rounded-lg border border-gray-200 bg-white p-4 shadow-lg"
+      className="fixed z-[9999] rounded-lg border border-[var(--color-gray-200)] bg-[var(--color-white)] p-4 shadow-lg"
       style={{ top: menuPos.top, left: menuPos.left, width: menuPos.width }}
     >
       <div className="space-y-3">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[#043570]">
+          <label className="mb-1 block text-sm font-medium text-[var(--color-primary)]">
             Start Date
           </label>
           <input
             type="date"
             value={tempStartDate}
             onChange={(e) => setTempStartDate(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-[#1f2937] focus:border-[#0A4D99] focus:outline-none"
+            className="w-full rounded-md border border-[var(--color-gray-300)] px-3 py-2 text-sm text-[var(--color-text-heading)] focus:border-[var(--color-primary-light)] focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-[#043570]">
+          <label className="mb-1 block text-sm font-medium text-[var(--color-primary)]">
             End Date
           </label>
           <input
@@ -145,7 +145,7 @@ const DateRangePicker = ({
             value={tempEndDate}
             onChange={(e) => setTempEndDate(e.target.value)}
             min={tempStartDate}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-[#1f2937] focus:border-[#0A4D99] focus:outline-none"
+            className="w-full rounded-md border border-[var(--color-gray-300)] px-3 py-2 text-sm text-[var(--color-text-heading)] focus:border-[var(--color-primary-light)] focus:outline-none"
           />
         </div>
 
@@ -153,14 +153,14 @@ const DateRangePicker = ({
           <button
             onClick={handleClear}
             type="button"
-            className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm text-[#595959] transition-colors hover:bg-gray-100"
+            className="flex-1 rounded-md border border-[var(--color-gray-300)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-gray-100)]"
           >
             Clear
           </button>
           <button
             onClick={handleApply}
             type="button"
-            className="flex-1 rounded-md bg-[#0A4D99] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-[#063C76]"
+            className="flex-1 rounded-md bg-[var(--color-primary-light)] px-3 py-2 text-sm font-medium text-[var(--color-white)] transition-colors hover:bg-[var(--color-primary-hover)]"
           >
             Apply
           </button>
@@ -176,24 +176,24 @@ const DateRangePicker = ({
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`flex h-10 w-full items-center justify-between rounded-[10px] border border-slate-400 bg-white px-3 py-2 text-left text-base font-normal leading-[1.4] text-[#1f2937] transition-all duration-200 focus:border-[#0A4D99] focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 ${
-          isOpen ? "border-[#0A4D99]" : ""
+        className={`flex h-10 w-full items-center justify-between rounded-[10px] border border-[var(--color-slate-400)] bg-[var(--color-white)] px-3 py-2 text-left text-base font-normal leading-[1.4] text-[var(--color-text-heading)] transition-all duration-200 focus:border-[var(--color-primary-light)] focus:outline-none disabled:cursor-not-allowed disabled:bg-[var(--color-gray-50)] disabled:text-[var(--color-gray-400)] ${
+          isOpen ? "border-[var(--color-primary-light)]" : ""
         }`}
       >
         <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-gray-600" />
+          <Calendar className="h-4 w-4 text-[var(--color-gray-600)]" />
           <span
             className={
               value.startDate || value.endDate
-                ? "text-[#1f2937]"
-                : "text-gray-500"
+                ? "text-[var(--color-text-heading)]"
+                : "text-[var(--color-gray-500)]"
             }
           >
             {getDisplayText()}
           </span>
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
+          className={`h-4 w-4 text-[var(--color-gray-600)] transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />

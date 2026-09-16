@@ -4,12 +4,12 @@ import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
 const DEFAULT_COLORS = [
-    "#0DB8F5",
-    "#E91E63",
-    "#FFA854",
-    "#16A34A",
-    "#8B5CF6",
-    "#6366F1",
+    "var(--color-chart-1)",
+    "var(--color-chart-2)",
+    "var(--color-chart-3)",
+    "var(--color-success)",
+    "var(--color-chart-5)",
+    "var(--color-chart-6)",
 ];
 
 const fadeInScale = `
@@ -93,7 +93,7 @@ export default function ReactLineChart({
                       textStyle: {
                           fontSize: 14,
                           fontWeight: 600,
-                          color: "#111827",
+                          color: "var(--color-text-primary)",
                           fontFamily: "Manrope, sans-serif",
                       },
                   }
@@ -101,16 +101,16 @@ export default function ReactLineChart({
 
             tooltip: {
                 trigger: "axis",
-                backgroundColor: "rgba(17, 24, 39, 0.9)",
+                backgroundColor: "var(--color-tooltip-bg)",
                 textStyle: {
-                    color: "#fff",
+                    color: "var(--color-white)",
                     fontFamily: "Manrope, sans-serif",
                     fontSize: 12,
                 },
                 axisPointer: {
                     type: "cross",
                     crossStyle: {
-                        color: "#999",
+                        color: "var(--color-mid-gray)",
                     },
                 },
             },
@@ -122,7 +122,7 @@ export default function ReactLineChart({
                       textStyle: {
                           fontFamily: "Manrope, sans-serif",
                           fontSize: 11,
-                          color: "#374151",
+                          color: "var(--color-text-body)",
                       },
                       itemWidth: 14,
                       itemHeight: 8,
@@ -143,20 +143,20 @@ export default function ReactLineChart({
                 data: data.labels,
                 boundaryGap: false,
                 axisLabel: {
-                    color: "#374151",
+                    color: "var(--color-text-body)",
                     fontSize: 11,
                     fontFamily: "Manrope, sans-serif",
                     rotate: data.labels.length > 12 ? 45 : 0,
                 },
                 axisLine: {
-                    lineStyle: { color: "#e5e7eb" },
+                    lineStyle: { color: "var(--color-border)" },
                 },
                 axisTick: { show: false },
                 name: xAxisName,
                 nameLocation: "middle",
                 nameGap: 26,
                 nameTextStyle: {
-                    color: "#1f2937",
+                    color: "var(--color-text-heading)",
                     fontSize: 12,
                     fontFamily: "Manrope, sans-serif",
                 },
@@ -165,19 +165,19 @@ export default function ReactLineChart({
             yAxis: {
                 type: "value",
                 axisLabel: {
-                    color: "#374151",
+                    color: "var(--color-text-body)",
                     fontSize: 11,
                     fontFamily: "Manrope, sans-serif",
                 },
                 axisLine: {
-                    lineStyle: { color: "#e5e7eb" },
+                    lineStyle: { color: "var(--color-border)" },
                 },
                 splitLine: {
-                    lineStyle: { color: "#f3f4f6" },
+                    lineStyle: { color: "var(--color-bg-muted)" },
                 },
                 name: yAxisName,
                 nameTextStyle: {
-                    color: "#1f2937",
+                    color: "var(--color-text-heading)",
                     fontSize: 12,
                     fontFamily: "Manrope, sans-serif",
                 },
@@ -211,9 +211,9 @@ export default function ReactLineChart({
             style={{
                 width: "100%",
                 height,
-                backgroundColor: "#fff",
+                backgroundColor: "var(--color-white)",
                 borderRadius: 12,
-                boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
+                boxShadow: "0 2px 8px var(--color-shadow-slate)",
                 padding: 8,
             }}
         >
@@ -222,18 +222,18 @@ export default function ReactLineChart({
             {loading ? (
                 <div className="absolute inset-0 animate-pulse p-5">
                     {title && (
-                        <div className="mb-5 h-4 w-32 rounded bg-gray-200" />
+                        <div className="mb-5 h-4 w-32 rounded bg-[var(--color-gray-200)]" />
                     )}
                     <div className="flex h-[calc(100%-45px)] items-end justify-between gap-3 px-4 pb-8">
                         {Array.from({ length: 8 }).map((_, i) => (
                             <div
                                 key={i}
-                                className="w-2 rounded-t bg-gray-200"
+                                className="w-2 rounded-t bg-[var(--color-gray-200)]"
                                 style={{ height: `${30 + Math.random() * 50}%` }}
                             />
                         ))}
                     </div>
-                    <div className="absolute bottom-4 left-8 right-8 h-px bg-gray-200" />
+                    <div className="absolute bottom-4 left-8 right-8 h-px bg-[var(--color-gray-200)]" />
                 </div>
             ) : (
                 <div

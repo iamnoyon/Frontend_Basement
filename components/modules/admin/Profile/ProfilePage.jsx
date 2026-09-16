@@ -105,20 +105,20 @@ export default function ProfilePage() {
     };
 
     const roleColors = {
-        superadmin: "bg-purple-100 text-purple-700 border-purple-200",
-        admin: "bg-blue-100 text-blue-700 border-blue-200",
-        manager: "bg-amber-100 text-amber-700 border-amber-200",
-        staff: "bg-green-100 text-green-700 border-green-200",
+        superadmin: "bg-[var(--color-purple-100)] text-[var(--color-purple-700)] border-[var(--color-purple-200)]",
+        admin: "bg-[var(--color-blue-100)] text-[var(--color-blue-700)] border-[var(--color-blue-200)]",
+        manager: "bg-[var(--color-amber-100)] text-[var(--color-amber-700)] border-[var(--color-amber-200)]",
+        staff: "bg-[var(--color-green-100)] text-[var(--color-green-700)] border-[var(--color-green-200)]",
     };
 
     const statusColors = {
-        active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-        inactive: "bg-red-100 text-red-700 border-red-200",
-        pending: "bg-orange-100 text-orange-700 border-orange-200",
+        active: "bg-[var(--color-emerald-100)] text-[var(--color-emerald-700)] border-[var(--color-emerald-200)]",
+        inactive: "bg-[var(--color-red-100)] text-[var(--color-red-700)] border-[var(--color-red-200)]",
+        pending: "bg-[var(--color-orange-100)] text-[var(--color-orange-700)] border-[var(--color-orange-200)]",
     };
 
-    const roleColor = roleColors[user?.role] || "bg-gray-100 text-gray-700 border-gray-200";
-    const statusColor = statusColors[user?.billing_status] || "bg-gray-100 text-gray-700 border-gray-200";
+    const roleColor = roleColors[user?.role] || "bg-[var(--color-gray-100)] text-[var(--color-gray-700)] border-[var(--color-gray-200)]";
+    const statusColor = statusColors[user?.billing_status] || "bg-[var(--color-gray-100)] text-[var(--color-gray-700)] border-[var(--color-gray-200)]";
 
     const tabs = [
         { id: "profile", label: "Profile Info", icon: User },
@@ -131,10 +131,10 @@ export default function ProfilePage() {
     const visibleTabs = isRestricted ? tabs.filter((t) => t.id === "profile") : tabs;
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/20 p-3 sm:p-4">
+        <div className="bg-gradient-to-br from-[var(--color-from-gray-50)] via-[var(--color-via-blue-50-30)] to-[var(--color-to-indigo-50-20)] p-3 sm:p-4">
             <div className="mx-auto w-full">
 
-                <div className="mb-4 flex flex-col sm:flex-row items-center gap-1 rounded-2xl bg-white p-1.5 shadow-md border border-gray-100">
+                <div className="mb-4 flex flex-col sm:flex-row items-center gap-1 rounded-2xl bg-[var(--color-white)] p-1.5 shadow-md border border-[var(--color-gray-100)]">
                     {visibleTabs.map((tab) => {
                         const Icon = tab.icon;
                         const isActive = activeTab === tab.id;
@@ -144,8 +144,8 @@ export default function ProfilePage() {
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 hover:cursor-pointer w-full sm:w-auto ${
                                     isActive
-                                        ? "bg-gradient-to-r from-[#042A55] to-[#0A4D99] text-white shadow-md shadow-blue-900/10"
-                                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                                        ? "bg-gradient-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-light)] text-[var(--color-white)] shadow-md shadow-[var(--color-shadow-blue-900-10)]"
+                                        : "text-[var(--color-gray-500)] hover:text-[var(--color-gray-700)] hover:bg-[var(--color-gray-50)]"
                                 }`}
                             >
                                 <Icon size={16} />

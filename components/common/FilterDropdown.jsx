@@ -87,8 +87,8 @@ const FilterDropdown = ({
         disabled={isDisabled}
         className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors cursor-pointer ${
           isDisabled
-            ? "opacity-50 cursor-not-allowed bg-gray-200 border-gray-300 text-gray-400"
-            : "bg-[#0d5fb5] border-[#0d5fb5] text-white hover:bg-[#0b4f96] hover:border-[#0b4f96]"
+            ? "opacity-50 cursor-not-allowed bg-[var(--color-gray-200)] border-[var(--color-gray-300)] text-[var(--color-gray-400)]"
+            : "bg-[var(--color-primary-filter)] border-[var(--color-primary-filter)] text-[var(--color-white)] hover:bg-[var(--color-primary-filter-hover)] hover:border-[var(--color-primary-filter-hover)]"
         }`}
       >
         <Filter size={16} className="shrink-0" />
@@ -98,7 +98,7 @@ const FilterDropdown = ({
         {selectedOption ? (
           <X
             size={14}
-            className="text-white/70 hover:text-white shrink-0"
+            className="text-[var(--color-overlay-white-70)] hover:text-[var(--color-white)] shrink-0"
             onClick={handleClear}
           />
         ) : (
@@ -112,7 +112,7 @@ const FilterDropdown = ({
       {isOpen && positioned && (
         <div
           ref={menuRef}
-          className="fixed min-w-[180px] w-max max-w-[240px] bg-white border border-gray-200 rounded-lg shadow-lg z-[9999] py-1 max-h-60 overflow-y-auto"
+          className="fixed min-w-[180px] w-max max-w-[240px] bg-[var(--color-white)] border border-[var(--color-gray-200)] rounded-lg shadow-lg z-[9999] py-1 max-h-60 overflow-y-auto"
           style={{ top: menuPos.top, right: menuPos.right }}
         >
           {options.length > 0 ? (
@@ -122,15 +122,15 @@ const FilterDropdown = ({
                 onClick={() => handleSelect(option)}
                 className={`w-full text-left px-4 py-2 text-sm transition-colors truncate hover:cursor-pointer ${
                   option?.[valueKey] === value
-                    ? "bg-gray-100 text-gray-900 font-medium"
-                    : "text-gray-700 hover:bg-gray-50"
+                    ? "bg-[var(--color-gray-100)] text-[var(--color-gray-900)] font-medium"
+                    : "text-[var(--color-gray-700)] hover:bg-[var(--color-gray-50)]"
                 }`}
               >
                 {option?.[labelKey]}
               </button>
             ))
           ) : (
-            <div className="px-4 py-2 text-sm text-gray-500">
+            <div className="px-4 py-2 text-sm text-[var(--color-gray-500)]">
               No options available
             </div>
           )}

@@ -53,7 +53,7 @@ const UserList = () => {
                     id: 'sl',
                     header: () => 'SL No.',
                     cell: (info) => (
-                        <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+                        <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
                             {info.row.index + 1}
                         </span>
                     ),
@@ -62,7 +62,7 @@ const UserList = () => {
                     id: 'name',
                     header: () => 'Name',
                     cell: (info) => (
-                        <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+                        <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
                             {info.getValue()}
                         </span>
                     ),
@@ -72,7 +72,7 @@ const UserList = () => {
                     id: 'email',
                     header: () => 'Email',
                     cell: (info) => (
-                        <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+                        <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
                             {info.getValue()}
                         </span>
                     ),
@@ -84,7 +84,7 @@ const UserList = () => {
                     cell: (info) => {
                         const role = info.getValue();
                         return (
-                            <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937] capitalize">
+                            <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)] capitalize">
                                 {role ? role : '-'}
                             </span>
                         );
@@ -96,7 +96,7 @@ const UserList = () => {
                     header: () => 'Business',
                     cell: (info) => {
                         return (
-                            <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+                            <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
                                 {info.getValue()?.businessName}
                             </span>
                         );
@@ -108,13 +108,13 @@ const UserList = () => {
                     header: () => 'Status',
                     cell: (info) => {
                         const status = info.getValue();
-                        let bgColor = 'bg-gray-500';
-                        if (status === 'active') bgColor = 'bg-[#16A34A]';
-                        if (status === 'suspended') bgColor = 'bg-[#F59E0B]';
-                        if (status === 'inactive') bgColor = 'bg-[#EF4444]';
+                        let bgColor = 'bg-[var(--color-gray-500)]';
+                        if (status === 'active') bgColor = 'bg-[var(--color-success)]';
+                        if (status === 'suspended') bgColor = 'bg-[var(--color-warning)]';
+                        if (status === 'inactive') bgColor = 'bg-[var(--color-danger)]';
 
                         return (
-                            <span className={`inline-block rounded-full px-3 py-1 text-[0.875rem] font-medium text-white ${bgColor}`}>
+                            <span className={`inline-block rounded-full px-3 py-1 text-[0.875rem] font-medium text-[var(--color-white)] ${bgColor}`}>
                                 {status ? status.charAt(0).toUpperCase() + status.slice(1) : '-'}
                             </span>
                         );

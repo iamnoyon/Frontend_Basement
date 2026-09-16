@@ -77,12 +77,12 @@ const FormRadioGroup = ({
     <div className={`w-full ${wrapperClass}`}>
       {label && (
         <label
-          className={`mb-2 block text-sm font-medium text-gray-800 ${labelClass}`}
+          className={`mb-2 block text-sm font-medium text-[var(--color-gray-800)] ${labelClass}`}
         >
           {label}
 
           {required && (
-            <span className="ml-1 text-red-600">*</span>
+            <span className="ml-1 text-[var(--color-red-600)]">*</span>
           )}
         </label>
       )}
@@ -124,14 +124,14 @@ const FormRadioGroup = ({
 
                     ${
                       checked
-                        ? "border-black bg-gray-50"
-                        : "border-gray-200 bg-white"
+                        ? "border-[var(--color-black)] bg-[var(--color-gray-50)]"
+                        : "border-[var(--color-gray-200)] bg-[var(--color-white)]"
                     }
 
                     ${
                       disabled
                         ? "opacity-60 cursor-not-allowed"
-                        : "hover:border-black"
+                        : "hover:border-[var(--color-black)]"
                     }
 
                     ${itemClass}
@@ -143,17 +143,17 @@ const FormRadioGroup = ({
 
                       ${
                         checked
-                          ? "border-black"
-                          : "border-gray-300"
+                          ? "border-[var(--color-black)]"
+                          : "border-[var(--color-gray-300)]"
                       }
                     `}
                   >
                     {checked && (
-                      <span className="h-2.5 w-2.5 rounded-full bg-black" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-black)]" />
                     )}
                   </div>
 
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-[var(--color-gray-700)]">
                     {optionLabel}
                   </span>
                 </div>
@@ -165,14 +165,14 @@ const FormRadioGroup = ({
 
       {remark && (
         <p
-          className={`mt-1 text-xs text-gray-500 ${remarkClass}`}
+          className={`mt-1 text-xs text-[var(--color-gray-500)] ${remarkClass}`}
         >
           {remark}
         </p>
       )}
 
       {errors[name] && (
-        <p className="mt-2 text-sm text-red-500">
+        <p className="mt-2 text-sm text-[var(--color-red-500)]">
           {errors[name]?.message}
         </p>
       )}

@@ -4,12 +4,12 @@ import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
 const DEFAULT_COLORS = [
-    "#0DB8F5",
-    "#E91E63",
-    "#FFA854",
-    "#795548",
-    "#607D8B",
-    "#E91E63",
+    "var(--color-chart-1)",
+    "var(--color-chart-2)",
+    "var(--color-chart-3)",
+    "var(--color-chart-7)",
+    "var(--color-chart-8)",
+    "var(--color-chart-2)",
 ];
 
 const fadeInScale = `
@@ -88,7 +88,7 @@ export default function ReactPieChart({
                         itemStyle: {
                             shadowBlur: 10,
                             shadowOffsetX: 0,
-                            shadowColor: "rgba(0, 0, 0, 0.5)",
+                            shadowColor: "var(--color-shadow-pie)",
                         },
                     },
                 },
@@ -120,9 +120,9 @@ export default function ReactPieChart({
             style={{
                 width: "100%",
                 height,
-                backgroundColor: "#fff",
+                backgroundColor: "var(--color-white)",
                 borderRadius: 12,
-                boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
+                boxShadow: "0 2px 8px var(--color-shadow-slate)",
                 padding: 8,
             }}
         >
@@ -138,7 +138,7 @@ export default function ReactPieChart({
                             maxWidth: 200,
                             maxHeight: 200,
                             background:
-                                "conic-gradient(#e5e7eb 0deg 90deg, #f3f4f6 90deg 180deg, #e5e7eb 180deg 270deg, #f3f4f6 270deg 360deg)",
+                                "conic-gradient(var(--color-border) 0deg 90deg, var(--color-bg-muted) 90deg 180deg, var(--color-border) 180deg 270deg, var(--color-bg-muted) 270deg 360deg)",
                             borderRadius: "50%",
                         }}
                     />

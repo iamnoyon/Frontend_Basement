@@ -110,12 +110,12 @@ const YearPicker = ({
   const dropdown = (
     <div
       ref={menuRef}
-      className="fixed z-[9999] rounded-lg border border-gray-200 bg-white shadow-lg"
+      className="fixed z-[9999] rounded-lg border border-[var(--color-gray-200)] bg-[var(--color-white)] shadow-lg"
       style={{ top: menuPos.top, left: menuPos.left, width: menuPos.width }}
     >
-      <div className="flex items-center justify-between border-b border-gray-100 px-3 py-2">
-        <span className="text-sm font-medium text-[#043570]">Select Year</span>
-        <span className="text-xs text-gray-400">
+      <div className="flex items-center justify-between border-b border-[var(--color-gray-100)] px-3 py-2">
+        <span className="text-sm font-medium text-[var(--color-primary)]">Select Year</span>
+        <span className="text-xs text-[var(--color-gray-400)]">
           {min} – {max}
         </span>
       </div>
@@ -131,13 +131,13 @@ const YearPicker = ({
               onClick={() => handleSelect(year)}
               className={`flex w-full items-center justify-between px-3 py-2 text-sm transition-colors ${
                 value === year
-                  ? "bg-[#0A4D99] font-medium text-white"
-                  : "text-[#1f2937] hover:bg-gray-100"
+                  ? "bg-[var(--color-primary-light)] font-medium text-[var(--color-white)]"
+                  : "text-[var(--color-text-heading)] hover:bg-[var(--color-gray-100)]"
               }`}
             >
               <span>{year}</span>
               {year === currentYear && value !== year && (
-                <span className="text-xs text-gray-400">Current</span>
+                <span className="text-xs text-[var(--color-gray-400)]">Current</span>
               )}
             </button>
           </li>
@@ -153,19 +153,19 @@ const YearPicker = ({
         type="button"
         onClick={handleToggle}
         disabled={disabled}
-        className={`flex h-10 w-full items-center justify-between rounded-[10px] border border-slate-400 bg-white px-3 py-2 pr-9 text-left text-base font-normal leading-[1.4] text-[#1f2937] transition-all duration-200 focus:border-[#0A4D99] focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 ${
-          isOpen ? "border-[#0A4D99]" : ""
+        className={`flex h-10 w-full items-center justify-between rounded-[10px] border border-[var(--color-slate-400)] bg-[var(--color-white)] px-3 py-2 pr-9 text-left text-base font-normal leading-[1.4] text-[var(--color-text-heading)] transition-all duration-200 focus:border-[var(--color-primary-light)] focus:outline-none disabled:cursor-not-allowed disabled:bg-[var(--color-gray-50)] disabled:text-[var(--color-gray-400)] ${
+          isOpen ? "border-[var(--color-primary-light)]" : ""
         }`}
       >
         <div className="flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-gray-600" />
-          <span className={value !== null ? "text-[#1f2937]" : "text-gray-500"}>
+          <CalendarDays className="h-4 w-4 text-[var(--color-gray-600)]" />
+          <span className={value !== null ? "text-[var(--color-text-heading)]" : "text-[var(--color-gray-500)]"}>
             {value !== null ? value : placeholder}
           </span>
         </div>
         {value === null || disabled ? (
           <ChevronDown
-            className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
+            className={`h-4 w-4 text-[var(--color-gray-600)] transition-transform duration-200 ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -177,7 +177,7 @@ const YearPicker = ({
           type="button"
           onClick={handleClear}
           aria-label="Clear year"
-          className="absolute top-1/2 right-3 -translate-y-1/2 rounded p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-[#0A4D99]"
+          className="absolute top-1/2 right-3 -translate-y-1/2 rounded p-1 text-[var(--color-gray-500)] transition-colors hover:bg-[var(--color-gray-100)] hover:text-[var(--color-primary-light)]"
         >
           <X className="h-3.5 w-3.5" />
         </button>

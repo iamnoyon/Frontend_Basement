@@ -80,7 +80,7 @@ const ReactTable = ({
                         {onSearchChange && (
                             <div className="relative md:w-[200px] w-full">
                                 <Search
-                                    className="absolute top-1/2 left-3 -translate-y-1/2 transform text-gray-400"
+                                    className="absolute top-1/2 left-3 -translate-y-1/2 transform text-[var(--color-gray-400)]"
                                     size={18}
                                 />
                                 <input
@@ -88,7 +88,7 @@ const ReactTable = ({
                                     value={searchQuery ?? ''}
                                     onChange={(e) => onSearchChange(e.target.value)}
                                     placeholder="Search"
-                                    className="w-full rounded-lg border border-gray-300 py-2 pr-4 pl-10 font-['DM_Sans',sans-serif] text-[0.875rem] focus:border-gray-300 focus:ring-1 focus:ring-gray-300 focus:outline-none"
+                                    className="w-full rounded-lg border border-[var(--color-gray-300)] py-2 pr-4 pl-10 font-['DM_Sans',sans-serif] text-[0.875rem] focus:border-[var(--color-gray-300)] focus:ring-1 focus:ring-[var(--color-gray-300)] focus:outline-none"
                                 />
                             </div>
                         )}
@@ -98,11 +98,11 @@ const ReactTable = ({
                     </div>
 
                     {/* Table */}
-                    <div className="bg-white px-4 overflow-x-auto">
+                    <div className="bg-[var(--color-white)] px-4 overflow-x-auto">
                         <table className="w-full min-w-[600px] border-collapse">
                             <thead>
                                 {table.getHeaderGroups().map((headerGroup) => (
-                                    <tr key={headerGroup.id} className="border-b-[0.5px] border-[#d9d9d9]">
+                                    <tr key={headerGroup.id} className="border-b-[0.5px] border-[var(--color-border-light)]">
                                         {allowRowSelect && (
                                             <th className="w-[43px]">{/* Checkbox removed from header */}</th>
                                         )}
@@ -114,7 +114,7 @@ const ReactTable = ({
                                                     onClick={isSortable ? header.column.getToggleSortingHandler() : undefined}
                                                     className={`px-1.5 py-1 text-left sm:px-2.5 ${isSortable ? 'cursor-pointer select-none' : ''}`}
                                                 >
-                                                    <span className="flex items-center gap-1 font-['Figtree',sans-serif] text-[0.75rem] leading-[1.2] text-[#043570] uppercase sm:text-[0.875rem]">
+                                                    <span className="flex items-center gap-1 font-['Figtree',sans-serif] text-[0.75rem] leading-[1.2] text-[var(--color-primary)] uppercase sm:text-[0.875rem]">
                                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                                         {isSortable && <ArrowUpDown className="h-3 w-3 sm:h-4 sm:w-4" />}
                                                     </span>
@@ -129,7 +129,7 @@ const ReactTable = ({
                                     <tr>
                                         <td
                                             colSpan={columns.length + (allowRowSelect ? 1 : 0)}
-                                            className="pt-4 text-center font-['DM_Sans',sans-serif] text-sm text-[#595959] sm:text-[1rem]"
+                                            className="pt-4 text-center font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-secondary)] sm:text-[1rem]"
                                         >
                                             No data available.
                                         </td>
@@ -139,7 +139,7 @@ const ReactTable = ({
                                         const isSelected = row.getIsSelected();
                                         return (
                                             <tr
-                                                className={`border-b-[0.3px] border-[#d9d9d9] ${isSelected ? 'bg-slate-100' : index % 2 === 0 ? 'bg-[#fcfcfc]' : 'bg-white'
+                                                className={`border-b-[0.3px] border-[var(--color-border-light)] ${isSelected ? 'bg-[var(--color-slate-100)]' : index % 2 === 0 ? 'bg-[var(--color-near-white)]' : 'bg-[var(--color-white)]'
                                                     }`}
                                                 key={row.id}
                                             >
@@ -149,13 +149,13 @@ const ReactTable = ({
                                                             type="checkbox"
                                                             checked={row.getIsSelected()}
                                                             onChange={row.getToggleSelectedHandler()}
-                                                            className="h-4 w-4 cursor-pointer rounded accent-(--bbp-red)"
+                                                            className="h-4 w-4 cursor-pointer rounded accent-[var(--color-bbp-red)]"
                                                         />
                                                     </td>
                                                 )}
                                                 {row.getVisibleCells().map((cell) => (
                                                     <td
-                                                        className="px-1.5 py-2 font-['DM_Sans',sans-serif] text-xs font-normal text-black sm:px-2.5 sm:py-3 sm:text-sm md:text-[1rem]"
+                                                        className="px-1.5 py-2 font-['DM_Sans',sans-serif] text-xs font-normal text-[var(--color-black)] sm:px-2.5 sm:py-3 sm:text-sm md:text-[1rem]"
                                                         key={cell.id}
                                                     >
                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -177,7 +177,7 @@ const ReactTable = ({
                             <div className="flex items-center gap-2">
                                 <label
                                     htmlFor="pageSizeSelect"
-                                    className="font-['DM_Sans',sans-serif] text-xs font-normal text-[#043570] sm:text-[0.875rem]"
+                                    className="font-['DM_Sans',sans-serif] text-xs font-normal text-[var(--color-primary)] sm:text-[0.875rem]"
                                 >
                                     Items per page
                                 </label>
@@ -185,10 +185,10 @@ const ReactTable = ({
                                     id="pageSizeSelect"
                                     value={pageAndLimit?.limit ?? 10}
                                     onChange={(e) => onPageLimitChange?.({ page: 1, limit: Number(e.target.value) })}
-                                    className="rounded border border-[#043570] px-2 py-1 font-['DM_Sans',sans-serif] text-xs text-[#043570] focus:ring-2 focus:outline-none sm:text-[0.875rem]"
+                                    className="rounded border border-[var(--color-primary)] px-2 py-1 font-['DM_Sans',sans-serif] text-xs text-[var(--color-primary)] focus:ring-2 focus:outline-none sm:text-[0.875rem]"
                                 >
                                     {[10, 20, 30, 50].map((item) => (
-                                        <option key={item} value={item} className='text-[#043570]'>
+                                        <option key={item} value={item} className='text-[var(--color-primary)]'>
                                             {item}
                                         </option>
                                     ))}
@@ -198,7 +198,7 @@ const ReactTable = ({
 
                         {paginationOn && pageAndLimit && totalRecords !== undefined && (
                             <div className="flex items-center gap-1 sm:gap-2">
-                                <div className="text-[#043570] sm:mr-10">
+                                <div className="text-[var(--color-primary)] sm:mr-10">
                                     {(pageAndLimit.page - 1) * pageAndLimit.limit + 1} {' – '}
                                     {Math.min(pageAndLimit.page * pageAndLimit.limit, totalRecords)} {' of '}
                                     {totalRecords}
@@ -206,7 +206,7 @@ const ReactTable = ({
                                 <button
                                     onClick={() => updatePageLimit(1, pageAndLimit.limit)}
                                     disabled={pageAndLimit.page === 1}
-                                    className="text-[#043570] transition-colors hover:text-(--bbp-red) disabled:opacity-30"
+                                    className="text-[var(--color-primary)] transition-colors hover:text-[var(--color-bbp-red)] disabled:opacity-30"
                                 >
                                     <ChevronFirst size={14} className="sm:h-5 sm:w-5" />
                                 </button>
@@ -214,7 +214,7 @@ const ReactTable = ({
                                 <button
                                     onClick={() => updatePageLimit(pageAndLimit.page - 1, pageAndLimit.limit)}
                                     disabled={pageAndLimit.page === 1}
-                                    className="text-[#043570] transition-colors hover:text-(--bbp-red) disabled:opacity-30"
+                                    className="text-[var(--color-primary)] transition-colors hover:text-[var(--color-bbp-red)] disabled:opacity-30"
                                 >
                                     <ChevronLeft size={14} className="sm:h-5 sm:w-5" />
                                 </button>
@@ -222,7 +222,7 @@ const ReactTable = ({
                                 <button
                                     onClick={() => updatePageLimit(pageAndLimit.page + 1, pageAndLimit.limit)}
                                     disabled={pageAndLimit.page * pageAndLimit.limit >= totalRecords}
-                                    className="text-[#043570] transition-colors hover:text-(--bbp-red) disabled:opacity-30"
+                                    className="text-[var(--color-primary)] transition-colors hover:text-[var(--color-bbp-red)] disabled:opacity-30"
                                 >
                                     <ChevronRight size={14} className="sm:h-5 sm:w-5" />
                                 </button>
@@ -235,7 +235,7 @@ const ReactTable = ({
                                         )
                                     }
                                     disabled={pageAndLimit.page * pageAndLimit.limit >= totalRecords}
-                                    className="text-[#043570] transition-colors hover:text-(--bbp-red) disabled:opacity-30"
+                                    className="text-[var(--color-primary)] transition-colors hover:text-[var(--color-bbp-red)] disabled:opacity-30"
                                 >
                                     <ChevronLast size={14} className="sm:h-5 sm:w-5" />
                                 </button>

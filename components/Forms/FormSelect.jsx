@@ -11,28 +11,28 @@ const defaultStyles = {
     minHeight: "44px",
     borderRadius: "10px",
     borderColor: state.isFocused
-      ? "#000"
-      : "#d1d5db",
+      ? "var(--color-black)"
+      : "var(--color-border-strong)",
     boxShadow: "none",
     "&:hover": {
-      borderColor: "#000",
+      borderColor: "var(--color-black)",
     },
   }),
 
   option: (provided, state) => ({
     ...provided,
     backgroundColor: state.isSelected
-      ? "#000"
+      ? "var(--color-black)"
       : state.isFocused
-      ? "#f3f4f6"
-      : "#fff",
-    color: state.isSelected ? "#fff" : "#111827",
+      ? "var(--color-bg-muted)"
+      : "var(--color-white)",
+    color: state.isSelected ? "var(--color-white)" : "var(--color-text-primary)",
     cursor: "pointer",
   }),
 
   placeholder: (provided) => ({
     ...provided,
-    color: "#9ca3af",
+    color: "var(--color-text-disabled)",
   }),
 
   menu: (provided) => ({
@@ -42,23 +42,23 @@ const defaultStyles = {
 
   multiValue: (provided) => ({
     ...provided,
-    backgroundColor: "#000",
+    backgroundColor: "var(--color-black)",
     borderRadius: "6px",
   }),
 
   multiValueLabel: (provided) => ({
     ...provided,
-    color: "#fff",
+    color: "var(--color-white)",
   }),
 
   multiValueRemove: (provided) => ({
     ...provided,
-    color: "#fff",
+    color: "var(--color-white)",
     cursor: "pointer",
 
     ":hover": {
-      backgroundColor: "#dc2626",
-      color: "#fff",
+      backgroundColor: "var(--color-danger-strong)",
+      color: "var(--color-white)",
     },
   }),
 };
@@ -119,12 +119,12 @@ const FormSelect = ({
       {label && (
         <label
           htmlFor={name}
-          className={`mb-1 text-gray-800 block text-sm font-medium ${labelClass}`}
+          className={`mb-1 text-[var(--color-gray-800)] block text-sm font-medium ${labelClass}`}
         >
           {label}
 
           {required && (
-            <span className="ml-1 text-red-700">*</span>
+            <span className="ml-1 text-[var(--color-red-700)]">*</span>
           )}
         </label>
       )}
@@ -176,14 +176,14 @@ const FormSelect = ({
 
       {remark && (
         <p
-          className={`mt-1 text-xs text-gray-500 ${remarkClass}`}
+          className={`mt-1 text-xs text-[var(--color-gray-500)] ${remarkClass}`}
         >
           {remark}
         </p>
       )}
 
       {errors[name] && (
-        <p className="mt-1 text-sm text-red-500">
+        <p className="mt-1 text-sm text-[var(--color-red-500)]">
           {errors[name]?.message}
         </p>
       )}

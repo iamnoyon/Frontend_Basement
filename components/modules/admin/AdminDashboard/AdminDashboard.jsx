@@ -47,7 +47,7 @@ const AdminDashboard = () => {
           iconName={Gauge}
           trendValue={summaryCards?.data?.totalRevenue?.change}
           trend={summaryCards?.data?.totalRevenue?.trend}
-          borderColor='border-b-indigo-600'
+          borderColor='border-b-[var(--color-indigo-600)]'
           loading={isLoading}
         />
         <StatCard
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
           iconName={Banknote}
           trendValue={summaryCards?.data?.totalExpenses?.change}
           trend={summaryCards?.data?.totalExpenses?.trend}
-          borderColor='border-b-rose-700'
+          borderColor='border-b-[var(--color-rose-700)]'
           isExpense={true}
           loading={isLoading}
         />
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
           iconName={Utensils}
           trendValue={summaryCards?.data?.totalOrders?.change}
           trend={summaryCards?.data?.totalOrders?.trend}
-          borderColor='border-b-green-800'
+          borderColor='border-b-[var(--color-green-800)]'
           loading={isLoading}
         />
         <StatCard
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
           iconName={Receipt}
           trendValue={summaryCards?.data?.netProfit?.change}
           trend={summaryCards?.data?.netProfit?.trend}
-          borderColor='border-b-purple-800'
+          borderColor='border-b-[var(--color-purple-800)]'
           loading={isLoading}
         />
         {/* <StatCard
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
           iconName={summaryCards?.[0]?.iconName}
           trendValue={summaryCards?.data?.totalDiscount?.change}
           trend={summaryCards?.data?.totalDiscount?.trend}
-          borderColor='border-b-lime-600'
+          borderColor='border-b-[var(--color-lime-600)]'
         /> */}
       </div>
       <AdminCharts />

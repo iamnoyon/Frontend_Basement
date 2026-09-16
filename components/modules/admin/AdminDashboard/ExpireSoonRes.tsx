@@ -31,7 +31,7 @@ const ExpireSoonRes = () => {
         id: "sl",
         header: () => "SL No.",
         cell: (info) => (
-          <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+          <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
             {(pageAndLimit.page - 1) * pageAndLimit.limit + info.row.index + 1}
           </span>
         ),
@@ -40,7 +40,7 @@ const ExpireSoonRes = () => {
         id: "businessName",
         header: () => "Business Name",
         cell: (info) => (
-          <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+          <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
             {info.getValue() || "-"}
           </span>
         ),
@@ -49,7 +49,7 @@ const ExpireSoonRes = () => {
         id: "ownerName",
         header: () => "Owner Email",
         cell: (info) => (
-          <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+          <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
             {info.getValue()?.email || "-"}
           </span>
         ),
@@ -58,7 +58,7 @@ const ExpireSoonRes = () => {
         id: "daysToExpire",
         header: () => "Days Left",
         cell: (info) => (
-          <span className="font-['DM_Sans',sans-serif] text-sm text-[#1f2937]">
+          <span className="font-['DM_Sans',sans-serif] text-sm text-[var(--color-text-heading)]">
             {info.getValue() + ' days' || "-"}
           </span>
         ),
@@ -69,7 +69,7 @@ const ExpireSoonRes = () => {
         cell: (info) => {
           const status = info.getValue();
           return (
-            <span className="inline-block rounded-full bg-yellow-100 px-3 py-1 text-[0.875rem] font-medium text-yellow-800">
+            <span className="inline-block rounded-full bg-[var(--color-yellow-100)] px-3 py-1 text-[0.875rem] font-medium text-[var(--color-yellow-800)]">
               {status ? status.charAt(0).toUpperCase() + status.slice(1) : "-"}
             </span>
           );

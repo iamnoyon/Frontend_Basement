@@ -21,7 +21,7 @@ const SuperAdminDashboard = () => {
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
-                    borderColor='border-b-indigo-600'
+                    borderColor='border-b-[var(--color-indigo-600)]'
                     loading={isLoading}
                 />
                 <StatCard
@@ -31,7 +31,7 @@ const SuperAdminDashboard = () => {
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
-                    borderColor='border-b-yellow-400'
+                    borderColor='border-b-[var(--color-yellow-400)]'
                     loading={isLoading}
                 />
                 <StatCard
@@ -41,7 +41,7 @@ const SuperAdminDashboard = () => {
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
-                    borderColor='border-b-purple-800'
+                    borderColor='border-b-[var(--color-purple-800)]'
                     loading={isLoading}
                 />
                 <StatCard
@@ -51,7 +51,7 @@ const SuperAdminDashboard = () => {
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
-                    borderColor='border-b-green-800'
+                    borderColor='border-b-[var(--color-green-800)]'
                     loading={isLoading}
                 />
                 <StatCard
@@ -61,7 +61,7 @@ const SuperAdminDashboard = () => {
                     iconName={Gauge}
                     // trendValue={summaryCards?.data?.totalRevenue?.change || ''}
                     // trend={summaryCards?.data?.totalRevenue?.trend || ''}
-                    borderColor='border-b-rose-700'
+                    borderColor='border-b-[var(--color-rose-700)]'
                     loading={isLoading}
                 />
             </div>

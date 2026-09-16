@@ -3,18 +3,18 @@
 import { X } from "lucide-react";
 
 const GROUP_COLORS = {
-  auth: { bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-300" },
-  user: { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-300" },
-  business: { bg: "bg-teal-100", text: "text-teal-800", border: "border-teal-300" },
-  category: { bg: "bg-orange-100", text: "text-orange-800", border: "border-orange-300" },
-  product: { bg: "bg-green-100", text: "text-green-800", border: "border-green-300" },
-  table: { bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-300" },
-  order: { bg: "bg-pink-100", text: "text-pink-800", border: "border-pink-300" },
-  expense: { bg: "bg-red-100", text: "text-red-800", border: "border-red-300" },
-  upload: { bg: "bg-gray-100", text: "text-gray-800", border: "border-gray-300" },
+  auth: { bg: "bg-[var(--color-purple-100)]", text: "text-[var(--color-purple-800)]", border: "border-[var(--color-purple-300)]" },
+  user: { bg: "bg-[var(--color-blue-100)]", text: "text-[var(--color-blue-800)]", border: "border-[var(--color-blue-300)]" },
+  business: { bg: "bg-[var(--color-teal-100)]", text: "text-[var(--color-teal-800)]", border: "border-[var(--color-teal-300)]" },
+  category: { bg: "bg-[var(--color-orange-100)]", text: "text-[var(--color-orange-800)]", border: "border-[var(--color-orange-300)]" },
+  product: { bg: "bg-[var(--color-green-100)]", text: "text-[var(--color-green-800)]", border: "border-[var(--color-green-300)]" },
+  table: { bg: "bg-[var(--color-amber-100)]", text: "text-[var(--color-amber-800)]", border: "border-[var(--color-amber-300)]" },
+  order: { bg: "bg-[var(--color-pink-100)]", text: "text-[var(--color-pink-800)]", border: "border-[var(--color-pink-300)]" },
+  expense: { bg: "bg-[var(--color-red-100)]", text: "text-[var(--color-red-800)]", border: "border-[var(--color-red-300)]" },
+  upload: { bg: "bg-[var(--color-gray-100)]", text: "text-[var(--color-gray-800)]", border: "border-[var(--color-gray-300)]" },
 };
 
-const DEFAULT_COLOR = { bg: "bg-gray-100", text: "text-gray-700", border: "border-gray-300" };
+const DEFAULT_COLOR = { bg: "bg-[var(--color-gray-100)]", text: "text-[var(--color-gray-700)]", border: "border-[var(--color-gray-300)]" };
 
 function getGroup(value) {
   if (!value) return DEFAULT_COLOR;
@@ -55,7 +55,7 @@ export default function PermissionTag({
             e.stopPropagation();
             onRemove(value);
           }}
-          className="ml-0.5 rounded-full p-0.5 transition-colors hover:cursor-pointer hover:bg-black/10"
+          className="ml-0.5 rounded-full p-0.5 transition-colors hover:cursor-pointer hover:bg-[var(--color-overlay-black-50)]"
         >
           <X size={size === "sm" ? 12 : 14} />
         </button>

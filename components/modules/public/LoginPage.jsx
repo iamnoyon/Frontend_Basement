@@ -46,51 +46,51 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-100)] px-4">
+            <div className="w-full max-w-md bg-[var(--color-white)] rounded-2xl shadow-lg p-8">
                 <div className="mb-2 text-center">
-                    <h1 className="text-2xl font-bold text-[#042A55]">Admin Panel</h1>
-                    <p className="text-gray-500 text-sm mt-1">
+                    <h1 className="text-2xl font-bold text-[var(--color-primary-deep)]">Admin Panel</h1>
+                    <p className="text-[var(--color-gray-500)] text-sm mt-1">
                         Sign in to your admin account
                     </p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        <label className="block text-sm font-medium text-[var(--color-gray-700)] mb-1.5">
                             Email
                         </label>
                         <div className="relative">
-                            <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-gray-400)]" />
                             <input
                                 type="email"
                                 placeholder="you@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-11 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#042A55] focus:border-transparent"
+                                className="w-full pl-11 pr-4 py-2.5 border border-[var(--color-gray-300)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-deep)] focus:border-transparent"
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        <label className="block text-sm font-medium text-[var(--color-gray-700)] mb-1.5">
                             Password
                         </label>
                         <div className="relative">
-                            <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-gray-400)]" />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#042A55] focus:border-transparent"
+                                className="w-full pl-11 pr-11 py-2.5 border border-[var(--color-gray-300)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-deep)] focus:border-transparent"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)]"
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -100,7 +100,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full bg-[#042A55] hover:enabled:bg-[#063C76] hover:cursor-pointer text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 ${isLoading ? "cursor-not-allowed" : ""
+                        className={`w-full bg-[var(--color-primary-deep)] hover:enabled:bg-[var(--color-primary-hover)] hover:cursor-pointer text-[var(--color-white)] font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 ${isLoading ? "cursor-not-allowed" : ""
                             }`}          >
                         {isLoading ? <><Loader2 size={18} className="animate-spin" /> Signing in...</> : "Sign In"}
                     </button>

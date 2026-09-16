@@ -72,7 +72,7 @@ const ThreeDotMenu = ({
         className={`p-2 rounded-md transition-colors ${
           isDisabled
             ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-100 cursor-pointer"
+            : "hover:bg-[var(--color-gray-100)] cursor-pointer"
         }`}
       >
         <svg
@@ -80,7 +80,7 @@ const ThreeDotMenu = ({
           height="20"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="text-gray-600"
+          className="text-[var(--color-gray-600)]"
         >
           <circle cx="12" cy="5" r="2" />
           <circle cx="12" cy="12" r="2" />
@@ -92,7 +92,7 @@ const ThreeDotMenu = ({
       {isOpen && (
         <div
           ref={menuRef}
-          className="fixed w-48 bg-white border border-gray-200 rounded-lg shadow-md z-[9999]"
+          className="fixed w-48 bg-[var(--color-white)] border border-[var(--color-gray-200)] rounded-lg shadow-md z-[9999]"
           style={{ top: menuPos.top, left: menuPos.left }}
         >
           <div className="py-1">
@@ -104,15 +104,15 @@ const ThreeDotMenu = ({
                   disabled={action.isDisabled}
                   className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                     action.isDisabled
-                      ? "text-gray-400 bg-gray-50 cursor-not-allowed"
-                      : "text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      ? "text-[var(--color-gray-400)] bg-[var(--color-gray-50)] cursor-not-allowed"
+                      : "text-[var(--color-gray-700)] hover:bg-[var(--color-gray-100)] cursor-pointer"
                   }`}
                 >
                   {action.label}
                 </button>
               ))
             ) : (
-              <div className="px-4 py-2 text-sm text-gray-500">
+              <div className="px-4 py-2 text-sm text-[var(--color-gray-500)]">
                 No actions available
               </div>
             )}

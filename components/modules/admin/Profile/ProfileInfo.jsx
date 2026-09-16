@@ -19,14 +19,14 @@ export default function ProfileInfo({
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-1 flex flex-col gap-4">
-                <div className="relative overflow-hidden rounded-2xl bg-white shadow-md border border-gray-100">
-                    <div className="h-16 bg-gradient-to-r from-[#042A55] via-[#063C76] to-[#0A4D99]" />
+                <div className="relative overflow-hidden rounded-2xl bg-[var(--color-white)] shadow-md border border-[var(--color-gray-100)]">
+                    <div className="h-16 bg-gradient-to-r from-[var(--color-primary-deep)] via-[var(--color-primary-hover)] to-[var(--color-primary-light)]" />
                     <div className="flex flex-col items-center -mt-8 px-4">
                         <div className="relative group">
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-from-blue-400)] to-[var(--color-to-indigo-600)] blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
                             <div
                                 onClick={() => fileRef.current.click()}
-                                className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-100 shadow-lg ring-2 ring-gray-100"
+                                className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border-4 border-[var(--color-white)] bg-[var(--color-gray-100)] shadow-lg ring-2 ring-[var(--color-gray-100)]"
                             >
                                 {preview || user?.profileImageUrl ? (
                                     <Image
@@ -37,13 +37,13 @@ export default function ProfileInfo({
                                         unoptimized={true}
                                     />
                                 ) : (
-                                    <User size={40} className="text-gray-400" />
+                                    <User size={40} className="text-[var(--color-gray-400)]" />
                                 )}
-                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-full bg-gray-900/50 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 rounded-full bg-[var(--color-overlay-gray-900-50)] opacity-0 transition-all duration-300 group-hover:opacity-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-white)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M12 5v14" /><path d="M5 12h14" />
                                     </svg>
-                                    <span className="text-[10px] font-medium text-white">Change</span>
+                                    <span className="text-[10px] font-medium text-[var(--color-white)]">Change</span>
                                 </div>
                             </div>
                             <input
@@ -69,16 +69,16 @@ export default function ProfileInfo({
                             return (
                                 <div
                                     key={index}
-                                    className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors group/item"
+                                    className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[var(--color-gray-50)] transition-colors group/item"
                                 >
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 group-hover/item:bg-blue-100 transition-colors">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-blue-50)] text-[var(--color-blue-600)] group-hover/item:bg-[var(--color-blue-100)] transition-colors">
                                         <Icon size={14} />
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+                                        <p className="text-[11px] font-medium text-[var(--color-gray-400)] uppercase tracking-wide">
                                             {item.label}
                                         </p>
-                                        <p className="truncate text-sm font-medium text-gray-700">
+                                        <p className="truncate text-sm font-medium text-[var(--color-gray-700)]">
                                             {item.value || "-"}
                                         </p>
                                     </div>
@@ -89,7 +89,7 @@ export default function ProfileInfo({
                     <div className="px-4 pb-4 mt-4">
                         <button
                             onClick={handleUpdate}
-                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#042A55] to-[#0A4D99] text-white py-3 px-5 hover:from-[#053d7e] hover:to-[#0C5DB3] hover:cursor-pointer text-sm font-semibold transition-all duration-300 shadow-md shadow-blue-900/10 hover:shadow-lg hover:shadow-blue-900/20 active:scale-[0.98]"
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-light)] text-[var(--color-white)] py-3 px-5 hover:from-[var(--color-primary-gradient-from)] hover:to-[var(--color-primary-gradient-to)] hover:cursor-pointer text-sm font-semibold transition-all duration-300 shadow-md shadow-[var(--color-shadow-blue-900-10)] hover:shadow-lg hover:shadow-[var(--color-shadow-blue-900-20)] active:scale-[0.98]"
                         >
                             <Settings size={16} />
                             Update Profile
@@ -99,21 +99,21 @@ export default function ProfileInfo({
             </div>
 
             <div className="lg:col-span-2 flex flex-col gap-4">
-                <div className="rounded-2xl bg-white shadow-md border border-gray-100 overflow-hidden">
-                    <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-400 to-rose-500 text-white shadow-sm shadow-red-200">
+                <div className="rounded-2xl bg-[var(--color-white)] shadow-md border border-[var(--color-gray-100)] overflow-hidden">
+                    <div className="flex items-center gap-3 border-b border-[var(--color-gray-100)] px-4 py-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-from-red-400)] to-[var(--color-to-rose-500)] text-[var(--color-white)] shadow-sm shadow-[var(--color-shadow-red-200)]">
                             <Lock size={18} />
                         </div>
                         <div>
-                            <h2 className="text-base font-bold text-gray-800 tracking-tight">
+                            <h2 className="text-base font-bold text-[var(--color-gray-800)] tracking-tight">
                                 Change Password
                             </h2>
-                            <p className="text-xs text-gray-400">Keep your account secure</p>
+                            <p className="text-xs text-[var(--color-gray-400)]">Keep your account secure</p>
                         </div>
                     </div>
                     <form onSubmit={handleChangePassword} className="p-4 space-y-3">
                         <div>
-                            <label className="mb-1.5 block text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <label className="mb-1.5 block text-xs font-semibold text-[var(--color-gray-600)] uppercase tracking-wider">
                                 New Password
                             </label>
                             <div className="relative">
@@ -127,7 +127,7 @@ export default function ProfileInfo({
                                         }))
                                     }
                                     placeholder="Enter new password"
-                                    className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pr-10 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                                    className="w-full rounded-xl border border-[var(--color-gray-200)] bg-[var(--color-gray-50)] p-3 pr-10 text-sm text-[var(--color-gray-700)] placeholder:text-[var(--color-gray-400)] focus:border-[var(--color-blue-400)] focus:bg-[var(--color-white)] focus:ring-2 focus:ring-[var(--color-blue-100)] outline-none transition-all"
                                 />
                                 <button
                                     type="button"
@@ -137,14 +137,14 @@ export default function ProfileInfo({
                                             new_password: !prev.new_password,
                                         }))
                                     }
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
                                 >
                                     {showPassword.new_password ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
                             </div>
                         </div>
                         <div>
-                            <label className="mb-1.5 block text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <label className="mb-1.5 block text-xs font-semibold text-[var(--color-gray-600)] uppercase tracking-wider">
                                 Confirm Password
                             </label>
                             <div className="relative">
@@ -158,7 +158,7 @@ export default function ProfileInfo({
                                         }))
                                     }
                                     placeholder="Re-enter new password"
-                                    className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pr-10 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                                    className="w-full rounded-xl border border-[var(--color-gray-200)] bg-[var(--color-gray-50)] p-3 pr-10 text-sm text-[var(--color-gray-700)] placeholder:text-[var(--color-gray-400)] focus:border-[var(--color-blue-400)] focus:bg-[var(--color-white)] focus:ring-2 focus:ring-[var(--color-blue-100)] outline-none transition-all"
                                 />
                                 <button
                                     type="button"
@@ -168,7 +168,7 @@ export default function ProfileInfo({
                                             confirm_password: !prev.confirm_password,
                                         }))
                                     }
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-gray-400)] hover:text-[var(--color-gray-600)] transition-colors"
                                 >
                                     {showPassword.confirm_password ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -176,7 +176,7 @@ export default function ProfileInfo({
                         </div>
                         <button
                             type="submit"
-                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-gray-900 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-all duration-300 shadow-md shadow-gray-900/10 hover:shadow-lg active:scale-[0.98] hover:cursor-pointer"
+                            className="w-full flex items-center justify-center gap-2 rounded-xl bg-[var(--color-gray-900)] py-3 text-sm font-semibold text-[var(--color-white)] hover:bg-[var(--color-gray-800)] transition-all duration-300 shadow-md shadow-[var(--color-shadow-gray-900-10)] hover:shadow-lg active:scale-[0.98] hover:cursor-pointer"
                         >
                             <Lock size={16} />
                             Update Password

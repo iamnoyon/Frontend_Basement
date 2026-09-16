@@ -48,10 +48,10 @@ const FormFileUpload = ({
         <div className={`w-full ${wrapperClass}`}>
             {label && (
                 <label
-                    className={`mb-2 block text-sm font-medium text-gray-800 ${labelClass}`}
+                    className={`mb-2 block text-sm font-medium text-[var(--color-gray-800)] ${labelClass}`}
                 >
                     {label}
-                    {required && <span className="ml-1 text-red-600">*</span>}
+                    {required && <span className="ml-1 text-[var(--color-red-600)]">*</span>}
                 </label>
             )}
 
@@ -154,31 +154,31 @@ const FormFileUpload = ({
                                 className={`
                   cursor-pointer rounded-xl border-2 border-dashed
                   p-8 text-center transition-all
-                  hover:border-blue-500 hover:bg-gray-50
+                  hover:border-[var(--color-blue-500)] hover:bg-[var(--color-gray-50)]
                   ${uploading ? "pointer-events-none opacity-60" : ""}
-                  ${errors[name] ? "border-red-500" : "border-gray-300"}
+                  ${errors[name] ? "border-[var(--color-red-500)]" : "border-[var(--color-gray-300)]"}
                 `}
                             >
                                 {uploading ? (
                                     <FiLoader
                                         size={40}
-                                        className="mx-auto mb-3 animate-spin text-blue-500"
+                                        className="mx-auto mb-3 animate-spin text-[var(--color-blue-500)]"
                                     />
                                 ) : (
                                     <FiUploadCloud
                                         size={40}
-                                        className="mx-auto mb-3 text-gray-400"
+                                        className="mx-auto mb-3 text-[var(--color-gray-400)]"
                                     />
                                 )}
 
-                                <p className="font-medium text-gray-700">
+                                <p className="font-medium text-[var(--color-gray-700)]">
                                     {uploading
                                         ? "Uploading..."
                                         : "Click to upload or drag files here"
                                     }
                                 </p>
 
-                                <p className="mt-1 text-xs text-gray-500">
+                                <p className="mt-1 text-xs text-[var(--color-gray-500)]">
                                     Allowed: {accept}
                                 </p>
 
@@ -198,7 +198,7 @@ const FormFileUpload = ({
                             {uploadErrors.length > 0 && (
                                 <div className="mt-3 space-y-1">
                                     {uploadErrors.map((msg, i) => (
-                                        <p key={i} className="text-sm text-red-500">
+                                        <p key={i} className="text-sm text-[var(--color-red-500)]">
                                             {msg}
                                         </p>
                                     ))}
@@ -212,7 +212,7 @@ const FormFileUpload = ({
                                         return (
                                             <div
                                                 key={index}
-                                                className="flex items-center justify-between rounded-lg border border-gray-200 p-3"
+                                                className="flex items-center justify-between rounded-lg border border-[var(--color-gray-200)] p-3"
                                             >
                                                 <div className="flex items-center gap-3 min-w-0">
                                                     {url ? (
@@ -225,9 +225,9 @@ const FormFileUpload = ({
                                                             unoptimized
                                                         />
                                                     ) : isFileObject(item) ? (
-                                                        <FiFile className="shrink-0 text-gray-500" />
+                                                        <FiFile className="shrink-0 text-[var(--color-gray-500)]" />
                                                     ) : (
-                                                        <FiCheck className="shrink-0 text-green-500" />
+                                                        <FiCheck className="shrink-0 text-[var(--color-green-500)]" />
                                                     )}
 
                                                     <div className="min-w-0">
@@ -235,12 +235,12 @@ const FormFileUpload = ({
                                                             {getDisplayName(item)}
                                                         </p>
                                                         {isFileObject(item) && (
-                                                            <p className="text-xs text-gray-500">
+                                                            <p className="text-xs text-[var(--color-gray-500)]">
                                                                 {(item.size / 1024).toFixed(1)} KB
                                                             </p>
                                                         )}
                                                         {url && (
-                                                            <p className="text-xs text-blue-500 truncate">
+                                                            <p className="text-xs text-[var(--color-blue-500)] truncate">
                                                                 {url}
                                                             </p>
                                                         )}
@@ -250,7 +250,7 @@ const FormFileUpload = ({
                                                 <button
                                                     type="button"
                                                     onClick={() => removeFile(index)}
-                                                    className="shrink-0 ml-2 text-red-500 hover:text-red-700"
+                                                    className="shrink-0 ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)]"
                                                 >
                                                     <FiX size={18} className="hover:cursor-pointer" />
                                                 </button>
@@ -261,9 +261,9 @@ const FormFileUpload = ({
                             )}
 
                             {errors[name] && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    {errors[name]?.message}
-                                </p>
+<p className="mt-2 text-sm text-[var(--color-red-500)]">
+                                {errors[name]?.message}
+                            </p>
                             )}
                         </>
                     );

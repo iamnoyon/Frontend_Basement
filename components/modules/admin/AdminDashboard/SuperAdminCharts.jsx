@@ -35,7 +35,7 @@ const SuperAdminCharts = () => {
                     data={chartData?.data?.businesses || []}
                     loading={chartLoading}
                     yKey='count'
-                    color='#249D8F'
+                    color='var(--color-chart-profit)'
                 />
             </div>
 
