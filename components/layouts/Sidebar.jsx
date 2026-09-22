@@ -22,8 +22,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
     return userPermissions.map((p) => (typeof p === "string" ? p : p.value));
   }, [userPermissions]);
 
-  const t = useTranslations("landingPage");
-  const brandTitle = t("title");
+  const t = useTranslations("dashboard");
+  const brandTitle = t("logo");
 
   const hasPermission = (requiredPermissions) => {
     if (!requiredPermissions || requiredPermissions.length === 0) return true;

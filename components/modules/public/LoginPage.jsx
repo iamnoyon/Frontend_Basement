@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import useToaster from "@/components/hooks/useToaster";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
     const router = useRouter();
-    const t = useTranslations("landingPage");
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -51,7 +49,7 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-[var(--color-gray-100)] px-4">
             <div className="w-full max-w-md bg-[var(--color-white)] rounded-2xl shadow-lg p-8">
                 <div className="mb-2 text-center">
-                    <h1 className="text-2xl font-bold text-[var(--color-primary-deep)]">{t("title")}</h1>
+                    <h1 className="text-2xl font-bold text-[var(--color-primary-deep)]">Admin Panel</h1>
                     <p className="text-[var(--color-gray-500)] text-sm mt-1">
                         Sign in to your admin account
                     </p>

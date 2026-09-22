@@ -1,12 +1,12 @@
-import enLandingPage from "./en/landingPage.json";
-import bnLandingPage from "./bn/landingPage.json";
+import enDashboard from "./en/dashboard.json";
+import bnDashboard from "./bn/dashboard.json";
 
 export const messages = {
     en: {
-        landingPage: enLandingPage,
+        dashboard: enDashboard,
     },
     bn: {
-        landingPage: bnLandingPage,
+        dashboard: bnDashboard,
     },
 };
 
