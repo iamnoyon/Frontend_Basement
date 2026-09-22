@@ -92,13 +92,10 @@ messages/                  Translation source files
   en/                      English strings
   bn/                      Bengali strings
 
-i18n/
-  request.js               next-intl server config (cookie-driven locale)
-
 proxy.js                   NextAuth middleware (protects /dashboard, /profile)
 
 auth.js                    NextAuth v5 configuration
-next.config.js             next-intl plugin + image remotePatterns
+next.config.js             Image remotePatterns
 ```
 
 ---
@@ -123,7 +120,6 @@ The app supports **English (`en`)** and **Bengali (`bn`)**. Default locale is `e
 | `components/i18n/LocaleSwitcher.jsx` | UI for switching between supported locales |
 | `messages/index.js` | Builds the static `messages` object keyed by locale, then by namespace |
 | `messages/en/<ns>.json`, `messages/bn/<ns>.json` | Per-locale translation sources |
-| `i18n/request.js` | Server-side locale config used by `next-intl` (reads `app_locale` cookie) |
 | `app/layout.jsx` | SSR: reads cookie, sets `<html lang dir>`, passes `initialLocale` to provider |
 
 ### Message file layout
