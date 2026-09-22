@@ -1,8 +1,11 @@
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/components/providers/ReduxProvider";
+import LocalizationProvider from "@/components/providers/LocalizationProvider";
 import { ToastContainer } from "react-toastify";
 import SessionProvider from "@/components/providers/SessionProvider";
+import { cookies } from "next/headers";
+import { DEFAULT_LOCALE, RTL_LOCALES, SUPPORTED_LOCALES } from "@/store/i18n/i18nSlice";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -15,12 +18,23 @@ export const metadata = {
     "CloudCafe is a complete restaurant management platform for managing orders, products, sales, customers, and business operations.",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("app_locale")?.value;
+  const initialLocale = SUPPORTED_LOCALES.includes(cookieLocale)
+    ? cookieLocale
+    : DEFAULT_LOCALE;
+  const dir = RTL_LOCALES.includes(initialLocale) ? "rtl" : "ltr";
+
   return (
-    <html lang="en" className={manrope.variable} data-scroll-behavior="smooth">
+    <html lang={initialLocale} dir={dir} className={manrope.variable} data-scroll-behavior="smooth">
       <body className={manrope.className}>
         <SessionProvider>
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            <LocalizationProvider initialLocale={initialLocale}>
+              {children}
+            </LocalizationProvider>
+          </ReduxProvider>
         </SessionProvider>
         <ToastContainer
           position="top-right"

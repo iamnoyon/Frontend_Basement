@@ -7,6 +7,7 @@ import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { performLogout } from "@/utils/logout";
 import { breadcrumbData } from "./menuItems";
+import LocaleSwitcher from "@/components/i18n/LocaleSwitcher";
 
 const idEncrypted = false; // Set to true if you want to encrypt the ID in the breadcrumb
 
@@ -139,6 +140,8 @@ export default function Topbar({ onMenuToggle }) {
             </div>
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                <LocaleSwitcher />
+
                 <button
                     type="button"
                     aria-label="Notifications"

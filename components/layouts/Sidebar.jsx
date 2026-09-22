@@ -6,6 +6,7 @@ import { menuItems } from "./menuItems";
 import { PanelLeftClose, PanelLeftOpen, ChevronDown } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useTranslations } from "next-intl";
 
 export default function Sidebar({ onNavClick, hideToggle }) {
   const pathname = usePathname();
@@ -20,6 +21,9 @@ export default function Sidebar({ onNavClick, hideToggle }) {
   const permissionValues = useMemo(() => {
     return userPermissions.map((p) => (typeof p === "string" ? p : p.value));
   }, [userPermissions]);
+
+  const t = useTranslations("landingPage");
+  const brandTitle = t("title");
 
   const hasPermission = (requiredPermissions) => {
     if (!requiredPermissions || requiredPermissions.length === 0) return true;
@@ -83,11 +87,8 @@ export default function Sidebar({ onNavClick, hideToggle }) {
             </h1>
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-2xl font-extrabold tracking-tight text-[var(--color-white)]">
-                Admin
-              </span>
               <span className="text-2xl font-extrabold tracking-tight text-[var(--color-accent)]">
-                Panel
+                {brandTitle}
               </span>
             </div>
           )
