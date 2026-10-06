@@ -31,6 +31,8 @@ import 'leaflet/dist/leaflet.css';
 import { useGetUnionsCoverageQuery, useGetWardsCoverageQuery } from '@/store/publilc_map';
 
 const RESULTS_URL = '/geo/dhamrai-ward-results.json'; // { candidates: [{id, name}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
+// Election results are hidden for now; set to true to show vote labels on the map and breakdowns in the legend.
+const SHOW_RESULTS = false;
 const DHAMRAI_CENTER = [23.9167, 90.2]; // initial view only, before data loads
 const WORLD_RING = [
   [-90, -180],
@@ -221,6 +223,7 @@ export default function DhamraiMap({ className = '' }) {
   else if (unionsLoaded && !collection) error = 'No union boundaries returned by the server';
 
   useEffect(() => {
+    if (!SHOW_RESULTS) return undefined;
     const controller = new AbortController();
 
     // Election results are optional too: without them wards just show their names.
@@ -352,7 +355,7 @@ export default function DhamraiMap({ className = '' }) {
       {collection && (
         <div
           className={`absolute right-3 top-3 z-[1000] flex max-h-[calc(100%-24px)] flex-col rounded bg-white/90 py-2 text-xs text-gray-700 shadow ${
-            selectedName || results ? 'w-64' : ''
+            results ? 'w-64' : ''
           }`}
         >
           {selectedName && (
@@ -395,7 +398,7 @@ export default function DhamraiMap({ className = '' }) {
                               />
                               Ward {ward.properties.ward}
                             </div>
-                            <ResultBreakdown summary={summary} />
+                            {results && <ResultBreakdown summary={summary} />}
                           </li>
                         );
                       })
