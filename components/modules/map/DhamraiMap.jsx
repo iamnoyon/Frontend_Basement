@@ -64,9 +64,29 @@ const percent = (part, whole) => (whole ? `${((part / whole) * 100).toFixed(1)}%
 // Per-candidate votes, turnout and leader for one ward; null when the ward has no result entry.
 function summarizeWard(results, code) {
   const entry = results?.wards?.[code];
-  if (!entry) return null;
+  return entry ? summarizeEntry(entry, results.candidates) : null;
+}
 
-  const rows = results.candidates.map(({ id, name }) => ({ id, name, votes: entry.votes?.[id] ?? 0 }));
+// Same summary for a whole union, adding up its wards; null when none of its wards have results.
+function summarizeUnion(results, wards, unionName) {
+  const entries = (wards?.features ?? [])
+    .filter((f) => f.properties.union === unionName)
+    .map((f) => results?.wards?.[f.properties.code])
+    .filter(Boolean);
+  if (!entries.length) return null;
+
+  const total = { totalVoters: 0, votes: {} };
+  entries.forEach((entry) => {
+    total.totalVoters += entry.totalVoters ?? 0;
+    results.candidates.forEach(({ id }) => {
+      total.votes[id] = (total.votes[id] ?? 0) + (entry.votes?.[id] ?? 0);
+    });
+  });
+  return summarizeEntry(total, results.candidates);
+}
+
+function summarizeEntry(entry, candidates) {
+  const rows = candidates.map(({ id, name }) => ({ id, name, votes: entry.votes?.[id] ?? 0 }));
   const totalVotes = rows.reduce((sum, row) => sum + row.votes, 0);
   const sorted = [...rows].sort((a, b) => b.votes - a.votes);
   const leader = sorted[0] && sorted[0].votes > (sorted[1]?.votes ?? 0) ? sorted[0] : null; // no leader on a tie
@@ -84,6 +104,39 @@ function summarizeWard(results, code) {
 // Short candidate tag for map labels: "Candidate A" -> "A", "Rahim Uddin" -> "RU".
 const initials = (name) =>
   name.startsWith('Candidate ') ? name.slice(10) : name.split(/\s+/).map((w) => w[0]).join('').toUpperCase();
+
+const resultLabelHtml = (title, summary) =>
+  `<strong>${title}</strong><br>${summary.rows.map((r) => `${initials(r.name)} ${formatNumber(r.votes)}`).join(' · ')}`;
+
+// Candidate votes, total voters, turnout and leader, as shown in the legend for a ward or a union.
+function ResultBreakdown({ summary }) {
+  if (!summary) return <div className="ml-5 italic text-gray-500">No results</div>;
+
+  return (
+    <div className="ml-5 mt-0.5 space-y-0.5 text-[11px] font-normal text-gray-600">
+      {summary.rows.map((row) => (
+        <div
+          key={row.id}
+          className={`flex justify-between gap-3 ${summary.leader?.id === row.id ? 'font-semibold text-gray-900' : ''}`}
+        >
+          <span>{row.name}</span>
+          <span>
+            {formatNumber(row.votes)} ({row.pct})
+          </span>
+        </div>
+      ))}
+      <div className="flex justify-between gap-3 border-t border-gray-200 pt-0.5">
+        <span>Total voters</span>
+        <span>{formatNumber(summary.totalVoters)}</span>
+      </div>
+      <div className="flex justify-between gap-3">
+        <span>Turnout</span>
+        <span>{summary.turnout}</span>
+      </div>
+      {summary.invalid && <div className="font-medium text-red-600">Votes exceed total voters</div>}
+    </div>
+  );
+}
 
 // Outer rings of every polygon, converted from GeoJSON [lng, lat] to Leaflet [lat, lng].
 function getOuterRings(collection) {
@@ -211,8 +264,36 @@ export default function DhamraiMap({ className = '' }) {
     styleRef.current = styleUnion;
   }, [styleUnion]);
 
+  // Union totals (sum of their wards), used for the overview labels and legend.
+  const unionSummaries = useMemo(
+    () =>
+      Object.fromEntries(
+        (collection?.features ?? []).map((f) => [f.properties.name, summarizeUnion(results, wards, f.properties.name)]),
+      ),
+    [collection, results, wards],
+  );
+
+  // Tooltips are set here rather than in bindUnion so they follow the selection without re-creating the layer:
+  // in the overview each union with results gets a permanent totals label, otherwise just its name on hover.
+  const unionLayerRef = useRef(null);
+  useEffect(() => {
+    unionLayerRef.current?.eachLayer((layer) => {
+      const { name } = layer.feature.properties;
+      const summary = unionSummaries[name];
+      layer.unbindTooltip();
+      if (!selectedName && summary) {
+        layer.bindTooltip(resultLabelHtml(name, summary), {
+          permanent: true,
+          direction: 'center',
+          className: 'ward-result-label',
+        });
+      } else {
+        layer.bindTooltip(name, { sticky: true });
+      }
+    });
+  }, [unionSummaries, selectedName, collection]);
+
   const bindUnion = (feature, layer) => {
-    layer.bindTooltip(feature.properties.name, { sticky: true });
     layer.on({
       click: () => setSelectedName(feature.properties.name),
       mouseover: () => layer.setStyle({ weight: 3, fillOpacity: 0.75 }),
@@ -224,8 +305,7 @@ export default function DhamraiMap({ className = '' }) {
   const bindWard = (feature, layer) => {
     const summary = summarizeWard(results, feature.properties.code);
     if (summary) {
-      const votes = summary.rows.map((r) => `${initials(r.name)} ${formatNumber(r.votes)}`).join(' · ');
-      layer.bindTooltip(`<strong>Ward ${feature.properties.ward}</strong><br>${votes}`, {
+      layer.bindTooltip(resultLabelHtml(`Ward ${feature.properties.ward}`, summary), {
         permanent: true,
         direction: 'center',
         className: 'ward-result-label',
@@ -252,7 +332,7 @@ export default function DhamraiMap({ className = '' }) {
       {collection && (
         <div
           className={`absolute right-3 top-3 z-[1000] flex max-h-[calc(100%-24px)] flex-col rounded bg-white/90 py-2 text-xs text-gray-700 shadow ${
-            selectedName ? 'w-64' : ''
+            selectedName || results ? 'w-64' : ''
           }`}
         >
           {selectedName && (
@@ -279,6 +359,8 @@ export default function DhamraiMap({ className = '' }) {
                   {name}
                 </button>
 
+                {!selectedName && results && <ResultBreakdown summary={unionSummaries[name]} />}
+
                 {name === selectedName && (
                   <ul className="mb-1 ml-5 mt-0.5 space-y-0.5 border-l border-gray-200 pl-2">
                     {selectedWards ? (
@@ -293,36 +375,7 @@ export default function DhamraiMap({ className = '' }) {
                               />
                               Ward {ward.properties.ward}
                             </div>
-                            {summary ? (
-                              <div className="ml-5 mt-0.5 space-y-0.5 text-[11px] text-gray-600">
-                                {summary.rows.map((row) => (
-                                  <div
-                                    key={row.id}
-                                    className={`flex justify-between gap-3 ${
-                                      summary.leader?.id === row.id ? 'font-semibold text-gray-900' : ''
-                                    }`}
-                                  >
-                                    <span>{row.name}</span>
-                                    <span>
-                                      {formatNumber(row.votes)} ({row.pct})
-                                    </span>
-                                  </div>
-                                ))}
-                                <div className="flex justify-between gap-3 border-t border-gray-200 pt-0.5">
-                                  <span>Total voters</span>
-                                  <span>{formatNumber(summary.totalVoters)}</span>
-                                </div>
-                                <div className="flex justify-between gap-3">
-                                  <span>Turnout</span>
-                                  <span>{summary.turnout}</span>
-                                </div>
-                                {summary.invalid && (
-                                  <div className="font-medium text-red-600">Votes exceed total voters</div>
-                                )}
-                              </div>
-                            ) : (
-                              <div className="ml-5 italic text-gray-500">No results</div>
-                            )}
+                            <ResultBreakdown summary={summary} />
                           </li>
                         );
                       })
@@ -353,7 +406,7 @@ export default function DhamraiMap({ className = '' }) {
               pathOptions={{ stroke: false, fillColor: '#f3f4f6', fillOpacity: 1 }}
             />
 
-            <GeoJSON data={collection} style={styleUnion} onEachFeature={bindUnion} />
+            <GeoJSON ref={unionLayerRef} data={collection} style={styleUnion} onEachFeature={bindUnion} />
 
             {selectedWards && (
               <GeoJSON
