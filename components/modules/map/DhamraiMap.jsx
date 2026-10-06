@@ -8,7 +8,10 @@
  *  - everything outside the upazila is masked out
  *  - the view is zoomed to fit the upazila and locked so users can't pan away
  *
- * Data: public/geo/dhamrai-unions.geojson, extracted from the geoBoundaries BGD ADM4 dataset
+ * Data: loaded from the backend (GET /union/list and /ward/list, see store/publilc_map), which is seeded from
+ * database/dhamrai_geo_seed.sql, generated from the two files below.
+ *
+ * Unions: public/geo/dhamrai-unions.geojson, extracted from the geoBoundaries BGD ADM4 dataset
  * (Bangladesh Bureau of Statistics / OCHA ROAP, CC BY 3.0 IGO):
  *   https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/BGD/ADM4/geoBoundaries-BGD-ADM4_simplified.geojson
  *
@@ -25,9 +28,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useGetUnionsCoverageQuery, useGetWardsCoverageQuery } from '@/store/publilc_map';
 
-const GEOJSON_URL = '/geo/dhamrai-unions.geojson';
-const WARDS_URL = '/geo/dhamrai-wards.geojson';
 const RESULTS_URL = '/geo/dhamrai-ward-results.json'; // { candidates: [{id, name}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
 const DHAMRAI_CENTER = [23.9167, 90.2]; // initial view only, before data loads
 const WORLD_RING = [
@@ -54,6 +56,36 @@ function toPolygonCollection(raw) {
     ['Polygon', 'MultiPolygon'].includes(f?.geometry?.type),
   );
   return features.length ? { type: 'FeatureCollection', features } : null;
+}
+
+// API rows -> the GeoJSON FeatureCollections the map works with.
+// /union/list: [{ id, name, is_paurashava, geometry }]
+function unionsToCollection(rows) {
+  if (!Array.isArray(rows)) return null;
+  return toPolygonCollection({
+    features: rows.map(({ id, name, is_paurashava, geometry }) => ({
+      type: 'Feature',
+      properties: { id, name, is_paurashava },
+      geometry,
+    })),
+  });
+}
+
+// /ward/list: [{ id, union_id, ward_no, code, geometry }]; the union is matched to /union/list by id.
+function wardsToCollection(rows, unionRows) {
+  if (!Array.isArray(rows)) return null;
+  const unionNameById = Object.fromEntries((unionRows ?? []).map((u) => [u.id, u.name]));
+  return toPolygonCollection({
+    features: rows.map((row) => ({
+      type: 'Feature',
+      properties: {
+        union: row.union_name ?? unionNameById[row.union_id],
+        ward: row.ward_no,
+        code: row.code,
+      },
+      geometry: row.geometry,
+    })),
+  });
 }
 
 const wardLabel = (feature) => `${feature.properties.union} – Ward ${feature.properties.ward}`;
@@ -174,34 +206,22 @@ function LockToBoundary({ collection, selectedFeature }) {
 }
 
 export default function DhamraiMap({ className = '' }) {
-  const [collection, setCollection] = useState(null);
-  const [error, setError] = useState(null);
-  const [wards, setWards] = useState(null);
   const [results, setResults] = useState(null);
   const [selectedName, setSelectedName] = useState(null);
 
+  const { data: unionRows, error: unionsError, isSuccess: unionsLoaded } = useGetUnionsCoverageQuery();
+  // Wards are optional: if they fail to load, selecting a union just zooms to it.
+  const { data: wardRows } = useGetWardsCoverageQuery();
+
+  const collection = useMemo(() => unionsToCollection(unionRows), [unionRows]);
+  const wards = useMemo(() => wardsToCollection(wardRows, unionRows), [wardRows, unionRows]);
+
+  let error = null;
+  if (unionsError) error = `Failed to load unions (${unionsError.status})`;
+  else if (unionsLoaded && !collection) error = 'No union boundaries returned by the server';
+
   useEffect(() => {
     const controller = new AbortController();
-
-    fetch(GEOJSON_URL, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load unions (${res.status})`);
-        return res.json();
-      })
-      .then((raw) => {
-        const polygons = toPolygonCollection(raw);
-        if (!polygons) throw new Error('Unions file has no Polygon/MultiPolygon geometry');
-        setCollection(polygons);
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setError(err.message);
-      });
-
-    // Wards are optional: if they fail to load, selecting a union just zooms to it.
-    fetch(WARDS_URL, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((raw) => setWards(toPolygonCollection(raw)))
-      .catch(() => {});
 
     // Election results are optional too: without them wards just show their names.
     fetch(RESULTS_URL, { signal: controller.signal })
