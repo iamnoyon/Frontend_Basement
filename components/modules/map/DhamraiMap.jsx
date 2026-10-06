@@ -196,7 +196,7 @@ export default function DhamraiMap({ className = '' }) {
 
   return (
     <div
-      className={`relative h-[600px] w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100 ${className}`}
+      className={`relative h-full w-full overflow-hidden bg-gray-100 ${className}`}
     >
       {error && (
         <div className="absolute left-3 top-3 z-[1000] rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">
