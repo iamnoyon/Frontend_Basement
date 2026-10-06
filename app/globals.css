@@ -303,3 +303,8 @@ body {
 @utility animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+/* Leaflet: no browser focus outline on clicked map shapes (unions are selectable from the legend too) */
+.leaflet-container path.leaflet-interactive:focus {
+  outline: none;
+}
