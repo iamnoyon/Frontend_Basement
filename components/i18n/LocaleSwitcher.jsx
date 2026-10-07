@@ -26,7 +26,7 @@ const LocaleSwitcher = () => {
                         type="button"
                         onClick={() => dispatch(setLocale(option.code))}
                         aria-pressed={isActive}
-                        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                        className={`rounded-full px-3 py-1 text-xs font-semibold transition hover:cursor-pointer ${
                             isActive
                                 ? "bg-[var(--color-primary)] text-[var(--color-white)]"
                                 : "text-[var(--color-gray-600)] hover:bg-[var(--color-gray-100)]"
