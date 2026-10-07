@@ -27,6 +27,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import { ChevronDown, List, X } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import {
   useGetFeaturesDropdownQuery,
@@ -180,6 +181,81 @@ function ResultBreakdown({ summary, images }) {
   );
 }
 
+// Election picker. A custom listbox rather than <select>, because phones open native selects in a system picker
+// whose text size and width can't be styled; this keeps the options as compact as the button on small screens.
+function ElectionSelect({ options, value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const selected = options.find((o) => o.id === value);
+
+  // Close on a tap/click outside or on Escape.
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointerDown = (e) => {
+      if (!rootRef.current?.contains(e.target)) setOpen(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
+  const choose = (id) => {
+    setOpen(false);
+    if (id !== value) onChange(id);
+  };
+
+  const items = [{ id: null, title: 'Select election' }, ...options];
+
+  return (
+    <div ref={rootRef} className="relative w-full">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label="Election"
+        className="flex h-9 w-full items-center gap-1 rounded border border-gray-300 bg-white pl-2 pr-1 text-left text-[13px] text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+      >
+        <span className={`min-w-0 flex-1 truncate ${selected ? '' : 'text-gray-500'}`}>
+          {selected?.title ?? 'Select election'}
+        </span>
+        <ChevronDown size={14} className={`shrink-0 text-gray-500 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          aria-label="Election"
+          className="absolute left-0 top-full mt-1 max-h-60 w-full overflow-y-auto rounded border border-gray-200 bg-white py-1 text-[13px] shadow-lg sm:text-sm"
+        >
+          {items.map((item) => {
+            const isSelected = item.id === (value ?? null);
+            return (
+              <li key={item.id ?? 'none'} role="option" aria-selected={isSelected}>
+                <button
+                  type="button"
+                  onClick={() => choose(item.id)}
+                  className={`w-full px-2 py-1.5 text-left hover:bg-gray-100 ${
+                    isSelected ? 'bg-blue-50 font-medium text-blue-700' : item.id == null ? 'text-gray-500' : 'text-gray-800'
+                  }`}
+                >
+                  {item.title}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 // Outer rings of every polygon, converted from GeoJSON [lng, lat] to Leaflet [lat, lng].
 function getOuterRings(collection) {
   const rings = [];
@@ -217,6 +293,8 @@ function LockToBoundary({ collection, selectedFeature }) {
 
 export default function DhamraiMap({ className = '' }) {
   const [selectedName, setSelectedName] = useState(null);
+  // Legend panel on phones: hidden by default, toggled with the button in the top-right (always shown from `sm` up).
+  const [panelOpen, setPanelOpen] = useState(false);
 
   const { data: unionRows, error: unionsError, isSuccess: unionsLoaded } = useGetUnionsCoverageQuery();
   // Wards are optional: if they fail to load, selecting a union just zooms to it.
@@ -368,36 +446,42 @@ export default function DhamraiMap({ className = '' }) {
       className={`relative h-full w-full overflow-hidden bg-gray-100 ${className}`}
     >
       {/* left-14 clears Leaflet's zoom buttons in the top-left corner */}
-      <div className="absolute left-14 top-3 z-[1000] flex max-w-[calc(100%-68px)] flex-col items-start gap-2 sm:max-w-xs">
+      {/* Narrow on phones (max 14rem, never reaching the panel toggle); 20rem from `sm` up. */}
+      <div className="absolute left-14 top-3 z-[1000] flex w-[min(14rem,calc(100%-120px))] flex-col items-stretch gap-2 sm:w-80">
         {features.length > 0 && (
-          <select
-            aria-label="Election"
-            value={featureId ?? ''}
-            onChange={(e) => {
-              const id = e.target.value ? Number(e.target.value) : null;
+          <ElectionSelect
+            options={features}
+            value={featureId}
+            onChange={(id) => {
               setFeatureId(id);
               setAutoSelectedFor(null); // let the new election's union (if any) be auto-selected
               setSelectedName(null); // every election (and "Select election") starts from the full upazila view
             }}
-            className="w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select election</option>
-            {features.map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.title}
-              </option>
-            ))}
-          </select>
+          />
         )}
 
         {error && <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">{error}</div>}
       </div>
 
       {collection && (
+        <button
+          type="button"
+          onClick={() => setPanelOpen((open) => !open)}
+          aria-expanded={panelOpen}
+          aria-controls="map-legend-panel"
+          aria-label={panelOpen ? 'Hide unions list' : 'Show unions list'}
+          className="absolute right-3 top-3 z-[1001] flex h-10 w-10 items-center justify-center rounded border border-gray-300 bg-white text-gray-700 shadow hover:bg-gray-50 sm:hidden"
+        >
+          {panelOpen ? <X size={20} /> : <List size={20} />}
+        </button>
+      )}
+
+      {collection && (
         <div
-          className={`absolute right-3 top-3 z-[1000] flex max-h-[calc(100%-24px)] flex-col rounded bg-white/90 py-2 text-xs text-gray-700 shadow ${
-            results ? 'w-64' : ''
-          }`}
+          id="map-legend-panel"
+          className={`absolute right-3 top-16 z-[1000] max-h-[80%] w-[min(16rem,calc(100%-24px))] flex-col rounded bg-white/95 py-2 text-xs text-gray-700 shadow sm:top-3 sm:flex ${
+            panelOpen ? 'flex' : 'hidden'
+          } ${results ? 'sm:w-64' : 'sm:w-auto'}`}
         >
           {results?.title && (
             <h2 className="mx-2 mb-2 border-b border-gray-200 pb-1.5 text-sm font-semibold text-gray-900">
