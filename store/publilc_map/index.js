@@ -15,9 +15,15 @@ export const publicMapSlice = apiSlice.injectEndpoints({
       }),
     }),
     getResultByFeatureId: builder.query({
-      query: ()=>({
-        url: "/feature/result/2",
+      query: ({featureId})=>({
+        url: `/feature/result/${featureId}`,
         method: "GET",
+      })
+    }),
+    getFeaturesDropdown: builder.query({
+      query: ()=>({
+        url: '/feature/dropdown',
+        method: 'GET'
       })
     })
   }),
@@ -27,5 +33,6 @@ export const publicMapSlice = apiSlice.injectEndpoints({
 export const {
     useGetUnionsCoverageQuery,
     useGetWardsCoverageQuery,
-    useGetResultByFeatureIdQuery
+    useGetResultByFeatureIdQuery,
+    useGetFeaturesDropdownQuery
 } = publicMapSlice;

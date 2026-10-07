@@ -29,6 +29,7 @@ import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
+  useGetFeaturesDropdownQuery,
   useGetResultByFeatureIdQuery,
   useGetUnionsCoverageQuery,
   useGetWardsCoverageQuery,
@@ -230,7 +231,12 @@ export default function DhamraiMap({ className = '' }) {
 
   // Election results are optional too: without them wards just show their names.
   // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
-  const { data: resultData } = useGetResultByFeatureIdQuery();
+  // Elections to pick from: { data: [{ id, title }] }. No election is selected by default.
+  const { data: featureOptions } = useGetFeaturesDropdownQuery();
+  const features = Array.isArray(featureOptions?.data) ? featureOptions.data : [];
+  const [featureId, setFeatureId] = useState(null);
+  // currentData (not data) so the previous election's numbers don't linger while the next one loads.
+  const { currentData: resultData } = useGetResultByFeatureIdQuery({ featureId }, { skip: featureId == null });
   const results = Array.isArray(resultData?.candidates) ? resultData : null;
   const candidateImages = useMemo(
     () => Object.fromEntries((results?.candidates ?? []).map((c) => [c.id, c.image])),
@@ -356,11 +362,31 @@ export default function DhamraiMap({ className = '' }) {
     <div
       className={`relative h-full w-full overflow-hidden bg-gray-100 ${className}`}
     >
-      {error && (
-        <div className="absolute left-3 top-3 z-[1000] rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">
-          {error}
-        </div>
-      )}
+      {/* left-14 clears Leaflet's zoom buttons in the top-left corner */}
+      <div className="absolute left-14 top-3 z-[1000] flex max-w-[calc(100%-68px)] flex-col items-start gap-2 sm:max-w-xs">
+        {features.length > 0 && (
+          <select
+            aria-label="Election"
+            value={featureId ?? ''}
+            onChange={(e) => {
+              const id = e.target.value ? Number(e.target.value) : null;
+              setFeatureId(id);
+              setAutoSelectedFor(null); // re-open the election's union even when picking the same one again
+              if (id == null) setSelectedName(null); // "Select election" = "Show all unions"
+            }}
+            className="w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select election</option>
+            {features.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.title}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {error && <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">{error}</div>}
+      </div>
 
       {collection && (
         <div
