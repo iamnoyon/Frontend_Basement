@@ -236,7 +236,12 @@ export default function DhamraiMap({ className = '' }) {
   const features = Array.isArray(featureOptions?.data) ? featureOptions.data : [];
   const [featureId, setFeatureId] = useState(null);
   // currentData (not data) so the previous election's numbers don't linger while the next one loads.
-  const { currentData: resultData } = useGetResultByFeatureIdQuery({ featureId }, { skip: featureId == null });
+  // fulfilledTimeStamp changes on every successful response (new election, cached election or refetch),
+  // so it's used below to redraw the ward labels, which are bound once per layer.
+  const { currentData: resultData, fulfilledTimeStamp: resultStamp } = useGetResultByFeatureIdQuery(
+    { featureId },
+    { skip: featureId == null },
+  );
   const results = Array.isArray(resultData?.candidates) ? resultData : null;
   const candidateImages = useMemo(
     () => Object.fromEntries((results?.candidates ?? []).map((c) => [c.id, c.image])),
@@ -371,8 +376,8 @@ export default function DhamraiMap({ className = '' }) {
             onChange={(e) => {
               const id = e.target.value ? Number(e.target.value) : null;
               setFeatureId(id);
-              setAutoSelectedFor(null); // re-open the election's union even when picking the same one again
-              if (id == null) setSelectedName(null); // "Select election" = "Show all unions"
+              setAutoSelectedFor(null); // let the new election's union (if any) be auto-selected
+              setSelectedName(null); // every election (and "Select election") starts from the full upazila view
             }}
             className="w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
@@ -476,7 +481,7 @@ export default function DhamraiMap({ className = '' }) {
 
             {selectedWards && (
               <GeoJSON
-                key={`${selectedName}-${results ? 'results' : 'plain'}`}
+                key={`${selectedName}-${results ? `${results.feature_id}-${resultStamp}` : 'plain'}`}
                 data={selectedWards} style={styleWard} onEachFeature={bindWard} />
             )}
 
