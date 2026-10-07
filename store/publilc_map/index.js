@@ -14,6 +14,12 @@ export const publicMapSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getResultByFeatureId: builder.query({
+      query: ()=>({
+        url: "/feature/result/2",
+        method: "GET",
+      })
+    })
   }),
   overrideExisting: true,
 });
@@ -21,4 +27,5 @@ export const publicMapSlice = apiSlice.injectEndpoints({
 export const {
     useGetUnionsCoverageQuery,
     useGetWardsCoverageQuery,
+    useGetResultByFeatureIdQuery
 } = publicMapSlice;

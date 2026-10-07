@@ -28,11 +28,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useGetUnionsCoverageQuery, useGetWardsCoverageQuery } from '@/store/publilc_map';
+import {
+  useGetResultByFeatureIdQuery,
+  useGetUnionsCoverageQuery,
+  useGetWardsCoverageQuery,
+} from '@/store/publilc_map';
 
-const RESULTS_URL = '/geo/dhamrai-ward-results.json'; // { candidates: [{id, name}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
-// Election results are hidden for now; set to true to show vote labels on the map and breakdowns in the legend.
-const SHOW_RESULTS = false;
 const DHAMRAI_CENTER = [23.9167, 90.2]; // initial view only, before data loads
 const WORLD_RING = [
   [-90, -180],
@@ -143,7 +144,7 @@ const resultLabelHtml = (title, summary) =>
   `<strong>${title}</strong><br>${summary.rows.map((r) => `${initials(r.name)} ${formatNumber(r.votes)}`).join(' · ')}`;
 
 // Candidate votes, total voters, turnout and leader, as shown in the legend for a ward or a union.
-function ResultBreakdown({ summary }) {
+function ResultBreakdown({ summary, images }) {
   if (!summary) return <div className="ml-5 italic text-gray-500">No results</div>;
 
   return (
@@ -153,7 +154,13 @@ function ResultBreakdown({ summary }) {
           key={row.id}
           className={`flex justify-between gap-3 ${summary.leader?.id === row.id ? 'font-semibold text-gray-900' : ''}`}
         >
-          <span>{row.name}</span>
+          <span className="flex items-center gap-1">
+            {images?.[row.id] && (
+              // eslint-disable-next-line @next/next/no-img-element -- arbitrary candidate image URLs from the API
+              <img src={images[row.id]} alt="" className="h-4 w-4 shrink-0 rounded-full object-cover" />
+            )}
+            {row.name}
+          </span>
           <span>
             {formatNumber(row.votes)} ({row.pct})
           </span>
@@ -208,7 +215,6 @@ function LockToBoundary({ collection, selectedFeature }) {
 }
 
 export default function DhamraiMap({ className = '' }) {
-  const [results, setResults] = useState(null);
   const [selectedName, setSelectedName] = useState(null);
 
   const { data: unionRows, error: unionsError, isSuccess: unionsLoaded } = useGetUnionsCoverageQuery();
@@ -222,18 +228,22 @@ export default function DhamraiMap({ className = '' }) {
   if (unionsError) error = `Failed to load unions (${unionsError.status})`;
   else if (unionsLoaded && !collection) error = 'No union boundaries returned by the server';
 
-  useEffect(() => {
-    if (!SHOW_RESULTS) return undefined;
-    const controller = new AbortController();
+  // Election results are optional too: without them wards just show their names.
+  // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
+  const { data: resultData } = useGetResultByFeatureIdQuery();
+  const results = Array.isArray(resultData?.candidates) ? resultData : null;
+  const candidateImages = useMemo(
+    () => Object.fromEntries((results?.candidates ?? []).map((c) => [c.id, c.image])),
+    [results],
+  );
 
-    // Election results are optional too: without them wards just show their names.
-    fetch(RESULTS_URL, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((raw) => setResults(Array.isArray(raw?.candidates) ? raw : null))
-      .catch(() => {});
-
-    return () => controller.abort();
-  }, []);
+  // A union-based election opens on its union once per election; "Show all unions" still zooms out.
+  const [autoSelectedFor, setAutoSelectedFor] = useState(null);
+  const resultUnionName = unionRows?.find((u) => u.id === results?.union_id)?.name;
+  if (results && resultUnionName && autoSelectedFor !== results.feature_id) {
+    setAutoSelectedFor(results.feature_id);
+    setSelectedName(resultUnionName);
+  }
 
   // World rectangle with every union cut out -> hides everything outside the upazila.
   const maskPositions = useMemo(
@@ -358,6 +368,11 @@ export default function DhamraiMap({ className = '' }) {
             results ? 'w-64' : ''
           }`}
         >
+          {results?.title && (
+            <h2 className="mx-2 mb-2 border-b border-gray-200 pb-1.5 text-sm font-semibold text-gray-900">
+              {results.title}
+            </h2>
+          )}
           {selectedName && (
             <button
               type="button"
@@ -382,7 +397,9 @@ export default function DhamraiMap({ className = '' }) {
                   {name}
                 </button>
 
-                {!selectedName && results && <ResultBreakdown summary={unionSummaries[name]} />}
+                {!selectedName && unionSummaries[name] && (
+                  <ResultBreakdown summary={unionSummaries[name]} images={candidateImages} />
+                )}
 
                 {name === selectedName && (
                   <ul className="mb-1 ml-5 mt-0.5 space-y-0.5 border-l border-gray-200 pl-2">
@@ -398,7 +415,7 @@ export default function DhamraiMap({ className = '' }) {
                               />
                               Ward {ward.properties.ward}
                             </div>
-                            {results && <ResultBreakdown summary={summary} />}
+                            {results && <ResultBreakdown summary={summary} images={candidateImages} />}
                           </li>
                         );
                       })
