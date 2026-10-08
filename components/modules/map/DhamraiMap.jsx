@@ -288,6 +288,9 @@ function getOuterRings(collection) {
   return rings;
 }
 
+// Padding around the fitted area: tight on phones so the upazila fills the narrow screen.
+const fitPadding = (map) => (map.getSize().x < 640 ? 4 : 24);
+
 // Locks panning/zooming-out to the upazila, and fits the view to the selected union (or the whole upazila).
 function LockToBoundary({ collection, selectedFeature }) {
   const map = useMap();
@@ -296,7 +299,8 @@ function LockToBoundary({ collection, selectedFeature }) {
     const bounds = L.geoJSON(collection).getBounds();
     if (!bounds.isValid()) return;
 
-    map.setMinZoom(map.getBoundsZoom(bounds, false, L.point(16, 16)));
+    const pad = fitPadding(map);
+    map.setMinZoom(map.getBoundsZoom(bounds, false, L.point(pad * 2, pad * 2)));
     map.setMaxBounds(bounds.pad(0.1));
   }, [collection, map]);
 
@@ -306,7 +310,8 @@ function LockToBoundary({ collection, selectedFeature }) {
     const bounds = L.geoJSON(selectedFeature ?? collection).getBounds();
     if (!bounds.isValid()) return;
 
-    map.fitBounds(bounds, { padding: [24, 24], animate: hasFitted.current });
+    const pad = fitPadding(map);
+    map.fitBounds(bounds, { padding: [pad, pad], animate: hasFitted.current });
     hasFitted.current = true;
   }, [collection, selectedFeature, map]);
 
@@ -610,6 +615,9 @@ export default function DhamraiMap({ className = '' }) {
       <MapContainer
         center={DHAMRAI_CENTER}
         zoom={11}
+        // Fractional zoom so fitBounds fills the screen instead of rounding down a whole level (most visible on phones).
+        zoomSnap={0.1}
+        zoomDelta={0.5}
         maxBoundsViscosity={1}
         className="h-full w-full bg-gray-100"
       >
