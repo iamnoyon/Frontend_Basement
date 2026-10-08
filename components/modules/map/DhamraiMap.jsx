@@ -27,7 +27,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { ChevronDown, List, X } from 'lucide-react';
+import { ChevronDown, List, RotateCw, TriangleAlert, X } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import {
   useGetFeaturesDropdownQuery,
@@ -278,6 +278,52 @@ function ElectionSelect({ options, value, onChange }) {
   );
 }
 
+const reloadPage = () => window.location.reload();
+
+// Shown over the map when the boundaries can't be loaded, so the map would otherwise stay empty.
+function MapErrorState({ message }) {
+  return (
+    <div className="absolute inset-0 z-[1002] flex items-center justify-center bg-gray-100/90 p-4">
+      <div role="alert" className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-6 text-center shadow-lg">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-600">
+          <TriangleAlert size={24} />
+        </div>
+        <h2 className="text-base font-semibold text-gray-900">Couldn&apos;t load the map</h2>
+        <p className="mt-1 text-sm text-gray-600">{message}</p>
+        <button
+          type="button"
+          onClick={reloadPage}
+          className="mt-4 inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          <RotateCw size={16} />
+          Retry
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Smaller notice for optional data (elections, results) that failed: the map itself still works.
+function InlineError({ message }) {
+  return (
+    <div
+      role="alert"
+      className="flex items-center gap-2 rounded border border-red-200 bg-red-50 py-1 pl-2 pr-1 text-[13px] text-red-700 shadow"
+    >
+      <TriangleAlert size={14} className="shrink-0" />
+      <span className="min-w-0 flex-1">{message}</span>
+      <button
+        type="button"
+        onClick={reloadPage}
+        className="inline-flex shrink-0 items-center gap-1 rounded px-2 py-1 font-medium hover:bg-red-100"
+      >
+        <RotateCw size={13} />
+        Retry
+      </button>
+    </div>
+  );
+}
+
 // Outer rings of every polygon, converted from GeoJSON [lng, lat] to Leaflet [lat, lng].
 function getOuterRings(collection) {
   const rings = [];
@@ -338,7 +384,7 @@ export default function DhamraiMap({ className = '' }) {
   // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { union_id, wardNo, Total_Number, votes: {[id]: n} } } }
   // Elections to pick from: { data: [{ id, title }] }. If there is exactly one it's selected by default,
   // otherwise none is. `undefined` = the user hasn't picked yet; picking "Select election" (null) is respected.
-  const { data: featureOptions } = useGetFeaturesDropdownQuery();
+  const { data: featureOptions, isError: featuresFailed } = useGetFeaturesDropdownQuery();
   const features = Array.isArray(featureOptions?.data) ? featureOptions.data : [];
   const [pickedFeatureId, setFeatureId] = useState(undefined);
   const featureId =
@@ -346,11 +392,16 @@ export default function DhamraiMap({ className = '' }) {
   // currentData (not data) so the previous election's numbers don't linger while the next one loads.
   // fulfilledTimeStamp changes on every successful response (new election, cached election or refetch),
   // so it's used below to redraw the ward labels, which are bound once per layer.
-  const { currentData: resultData, fulfilledTimeStamp: resultStamp } = useGetResultByFeatureIdQuery(
-    { featureId },
-    { skip: featureId == null },
-  );
+  const {
+    currentData: resultData,
+    fulfilledTimeStamp: resultStamp,
+    isError: resultsFailed,
+  } = useGetResultByFeatureIdQuery({ featureId }, { skip: featureId == null });
   const results = Array.isArray(resultData?.candidates) ? resultData : null;
+
+  let dataError = null;
+  if (featuresFailed) dataError = 'Failed to load elections';
+  else if (featureId != null && resultsFailed) dataError = 'Failed to load election results';
   const candidateImages = useMemo(
     () => Object.fromEntries((results?.candidates ?? []).map((c) => [c.id, c.image])),
     [results],
@@ -522,8 +573,10 @@ export default function DhamraiMap({ className = '' }) {
           </div>
         )}
 
-        {error && <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">{error}</div>}
+        {!error && dataError && <InlineError message={dataError} />}
       </div>
+
+      {error && <MapErrorState message={error} />}
 
       {collection && (
         <button
