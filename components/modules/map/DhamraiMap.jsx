@@ -169,7 +169,7 @@ function ResultBreakdown({ summary, images }) {
         </div>
       ))}
       <div className="flex justify-between gap-3 border-t border-gray-200 pt-0.5">
-        <span>Total voters</span>
+        <span>Total Number</span>
         <span>{formatNumber(summary.totalVoters)}</span>
       </div>
       <div className="flex justify-between gap-3">
