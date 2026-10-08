@@ -97,8 +97,9 @@ const wardLabel = (feature) => `${feature.properties.union} – Ward ${feature.p
 
 const formatNumber = (n) => (Number(n) || 0).toLocaleString('en-US');
 
-// A ward's voter count; the API may send it as totalVoters or total_voter, or leave it out.
-const entryVoters = (entry) => Number(entry?.totalVoters ?? entry?.total_voter) || 0;
+// A ward's total number. /feature/result/:id sends it as Total_Number; older names are still accepted.
+const entryVoters = (entry) =>
+  Number(entry?.Total_Number ?? entry?.total_number ?? entry?.totalVoters ?? entry?.total_voter) || 0;
 const percent = (part, whole) => (whole ? `${((part / whole) * 100).toFixed(1)}%` : '–');
 
 // Per-candidate votes, turnout and leader for one ward; null when the ward has no result entry.
@@ -107,11 +108,28 @@ function summarizeWard(results, code) {
   return entry ? summarizeEntry(entry, results.candidates) : null;
 }
 
-// Same summary for a whole union, adding up its wards; null when none of its wards have results.
-function summarizeUnion(results, wards, unionName) {
+// Result entry for a union as a whole rather than per ward (e.g. the paurashava, which has no wards):
+// keyed "union-<id>", with wardNo null.
+function findAreaEntry(results, unionId) {
+  if (unionId == null || !results?.wards) return null;
+  return (
+    results.wards[`union-${unionId}`] ??
+    Object.values(results.wards).find((e) => e?.wardNo == null && e?.union_id === unionId) ??
+    null
+  );
+}
+
+function summarizeArea(results, unionId) {
+  const entry = findAreaEntry(results, unionId);
+  return entry ? summarizeEntry(entry, results.candidates) : null;
+}
+
+// Same summary for a whole union, adding up its wards and any whole-area entry; null when it has no results.
+function summarizeUnion(results, wards, unionName, unionId) {
   const entries = (wards?.features ?? [])
     .filter((f) => f.properties.union === unionName)
     .map((f) => results?.wards?.[f.properties.code])
+    .concat(findAreaEntry(results, unionId))
     .filter(Boolean);
   if (!entries.length) return null;
 
@@ -312,7 +330,7 @@ export default function DhamraiMap({ className = '' }) {
   else if (unionsLoaded && !collection) error = 'No union boundaries returned by the server';
 
   // Election results are optional too: without them wards just show their names.
-  // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
+  // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { union_id, wardNo, Total_Number, votes: {[id]: n} } } }
   // Elections to pick from: { data: [{ id, title }] }. If there is exactly one it's selected by default,
   // otherwise none is. `undefined` = the user hasn't picked yet; picking "Select election" (null) is respected.
   const { data: featureOptions } = useGetFeaturesDropdownQuery();
@@ -393,14 +411,23 @@ export default function DhamraiMap({ className = '' }) {
     styleRef.current = styleUnion;
   }, [styleUnion]);
 
-  // Union totals (sum of their wards), used for the overview labels and legend.
+  // Union totals (sum of their wards plus any whole-area entry), used for the overview labels and legend.
   const unionSummaries = useMemo(
     () =>
       Object.fromEntries(
-        (collection?.features ?? []).map((f) => [f.properties.name, summarizeUnion(results, wards, f.properties.name)]),
+        (collection?.features ?? []).map((f) => [
+          f.properties.name,
+          summarizeUnion(results, wards, f.properties.name, f.properties.id),
+        ]),
       ),
     [collection, results, wards],
   );
+  const unionIdByName = useMemo(
+    () => Object.fromEntries((collection?.features ?? []).map((f) => [f.properties.name, f.properties.id])),
+    [collection],
+  );
+  // Whole-area result of the selected union, shown when it has no ward boundaries (e.g. the paurashava).
+  const selectedAreaSummary = selectedName ? summarizeArea(results, unionIdByName[selectedName]) : null;
 
   // Tooltips are set here rather than in bindUnion so they follow the selection without re-creating the layer:
   // in the overview each union with results gets a permanent totals label, otherwise just its name on hover.
@@ -410,7 +437,8 @@ export default function DhamraiMap({ className = '' }) {
       const { name } = layer.feature.properties;
       const summary = unionSummaries[name];
       layer.unbindTooltip();
-      if (!selectedName && summary) {
+      // Overview: every union's totals. Selected union without wards: its whole-area totals stay on the map.
+      if (summary && (!selectedName || (name === selectedName && !selectedWards))) {
         layer.bindTooltip(resultLabelHtml(name, summary), {
           permanent: true,
           direction: 'center',
@@ -420,7 +448,7 @@ export default function DhamraiMap({ className = '' }) {
         layer.bindTooltip(name, { sticky: true });
       }
     });
-  }, [unionSummaries, selectedName, collection]);
+  }, [unionSummaries, selectedName, selectedWards, collection]);
 
   const bindUnion = (feature, layer) => {
     layer.on({
@@ -563,6 +591,11 @@ export default function DhamraiMap({ className = '' }) {
                           </li>
                         );
                       })
+                    ) : selectedAreaSummary ? (
+                      <li className="py-0.5">
+                        <div className="font-medium">Full area</div>
+                        <ResultBreakdown summary={selectedAreaSummary} images={candidateImages} />
+                      </li>
                     ) : (
                       <li className="py-0.5 italic text-gray-500">No ward boundaries available</li>
                     )}

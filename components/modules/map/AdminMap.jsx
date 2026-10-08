@@ -2,12 +2,15 @@
 
 /**
  * Admin view of one election ("feature"): its wards grouped by union in a collapsible accordion,
- * with an input per ward to edit its total voters.
+ * with an input per ward to edit its total number.
  *
- * Data: GET /feature/dropdown for the list of elections, GET /feature/:id for the selected one (see store/publilc_map).
+ * Data: GET /feature/dropdown for the list of elections, GET /feature/:id for the selected one, PUT /feature/:id to
+ * save it (see store/publilc_map).
  * /feature/:id -> { data: { id, title, is_union_based, union_name, status, candidates, wards: [
- *   { code, ward_id, ward_no, union_id, union_name, total_voter }
+ *   { code, ward_id, ward_no, union_id, union_name, total_number }
  * ] } }
+ * The paurashava has no wards, so it is one entry with code, ward_id and ward_no all null. If the API doesn't
+ * return that entry yet, it is added from /union/list (is_paurashava) so its number can still be entered.
  */
 
 import { useMemo, useState } from 'react';
@@ -16,8 +19,14 @@ import useToaster from '@/components/hooks/useToaster';
 import {
   useGetFeatureByIdQuery,
   useGetFeaturesDropdownQuery,
+  useGetUnionsCoverageQuery,
   useUpdateFeatureByIdMutation,
 } from '@/store/publilc_map';
+
+// Wards are keyed by code; the paurashava's ward-less entry (code null) by its union instead.
+const wardKey = (w) => w.code ?? `union-${w.union_id}`;
+// Older responses call the field total_voter.
+const wardNumber = (w) => String(Number(w.total_number ?? w.total_voter) || 0);
 
 // wards -> [{ union_id, union_name, wards: [...] }], unions in first-seen order, wards sorted by number.
 function groupByUnion(wards) {
@@ -28,13 +37,14 @@ function groupByUnion(wards) {
     }
     groups.get(ward.union_id).wards.push(ward);
   }
-  for (const group of groups.values()) group.wards.sort((a, b) => a.ward_no - b.ward_no);
+  for (const group of groups.values()) group.wards.sort((a, b) => (a.ward_no ?? 0) - (b.ward_no ?? 0));
   return [...groups.values()];
 }
 
 function UnionAccordion({ group, open, onToggle, values, onChange }) {
-  const total = group.wards.reduce((sum, w) => sum + (Number(values[w.code]) || 0), 0);
-  const changed = group.wards.filter((w) => values[w.code] !== String(w.total_voter ?? 0)).length;
+  const total = group.wards.reduce((sum, w) => sum + (Number(values[wardKey(w)]) || 0), 0);
+  const changed = group.wards.filter((w) => values[wardKey(w)] !== wardNumber(w)).length;
+  const wardCount = group.wards.filter((w) => w.code != null).length;
 
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -55,11 +65,9 @@ function UnionAccordion({ group, open, onToggle, values, onChange }) {
           </span>
         )}
         <span className="text-xs text-gray-500">
-          {group.wards.length} ward{group.wards.length === 1 ? '' : 's'}
+          {wardCount ? `${wardCount} ward${wardCount === 1 ? '' : 's'}` : 'No wards'}
         </span>
-        <span className="w-28 text-right text-sm text-gray-700">
-          {total.toLocaleString()} <span className="text-xs text-gray-500">voters</span>
-        </span>
+        <span className="w-28 text-right text-sm font-medium text-gray-700">{total.toLocaleString()}</span>
       </button>
 
       {open && (
@@ -68,25 +76,27 @@ function UnionAccordion({ group, open, onToggle, values, onChange }) {
             <tr>
               <th className="px-4 py-2 text-left font-medium">Ward</th>
               <th className="px-4 py-2 text-left font-medium">Code</th>
-              <th className="px-4 py-2 text-right font-medium">Total voters</th>
+              <th className="px-4 py-2 text-right font-medium">Total number</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {group.wards.map((ward) => {
-              const value = values[ward.code];
-              const dirty = value !== String(ward.total_voter ?? 0);
+              const key = wardKey(ward);
+              const value = values[key];
+              const dirty = value !== wardNumber(ward);
+              const label = ward.ward_no != null ? `Ward ${ward.ward_no}` : 'Whole area';
               return (
-                <tr key={ward.code}>
-                  <td className="px-4 py-2 text-gray-900">Ward {ward.ward_no}</td>
-                  <td className="px-4 py-2 font-mono text-xs text-gray-500">{ward.code}</td>
+                <tr key={key}>
+                  <td className="px-4 py-2 text-gray-900">{label}</td>
+                  <td className="px-4 py-2 font-mono text-xs text-gray-500">{ward.code ?? '–'}</td>
                   <td className="px-4 py-2 text-right">
                     <input
                       type="number"
                       min={0}
                       inputMode="numeric"
                       value={value}
-                      onChange={(e) => onChange(ward.code, e.target.value)}
-                      aria-label={`Total voters, ${group.union_name} ward ${ward.ward_no}`}
+                      onChange={(e) => onChange(key, e.target.value)}
+                      aria-label={`Total number, ${group.union_name} ${label}`}
                       className={`w-32 rounded border px-2 py-1 text-right focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                         dirty ? 'border-amber-400 bg-amber-50' : 'border-gray-300'
                       }`}
@@ -220,12 +230,33 @@ function CandidatesEditor({ candidates, initialCandidates, onChange }) {
 function FeatureWards({ feature, onSaved }) {
   const [updateFeature, { isLoading: isSaving }] = useUpdateFeatureByIdMutation();
   const { successToaster, errorToaster } = useToaster();
-  const wards = useMemo(() => (Array.isArray(feature.wards) ? feature.wards : []), [feature.wards]);
+  const { data: unionRows } = useGetUnionsCoverageQuery();
+
+  const wards = useMemo(() => {
+    // One entry per ward, even if the API repeats one (first occurrence wins).
+    const seen = new Set();
+    const list = (Array.isArray(feature.wards) ? feature.wards : []).filter((w) => {
+      const id = w.ward_id ?? wardKey(w);
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+    // Add a ward-less entry for each paurashava in scope that the API didn't return.
+    const missing = (Array.isArray(unionRows) ? unionRows : [])
+      .filter((u) => u.is_paurashava && !list.some((w) => w.union_id === u.id))
+      .filter((u) => !feature.is_union_based || feature.union_id === u.id)
+      .map((u) => ({
+        code: null,
+        ward_id: null,
+        ward_no: null,
+        union_id: u.id,
+        union_name: u.name,
+        total_number: 0,
+      }));
+    return [...list, ...missing];
+  }, [feature.wards, feature.is_union_based, feature.union_id, unionRows]);
   const groups = useMemo(() => groupByUnion(wards), [wards]);
-  const initialValues = useMemo(
-    () => Object.fromEntries(wards.map((w) => [w.code, String(w.total_voter ?? 0)])),
-    [wards],
-  );
+  const initialValues = useMemo(() => Object.fromEntries(wards.map((w) => [wardKey(w), wardNumber(w)])), [wards]);
   const initialCandidates = useMemo(
     () =>
       (Array.isArray(feature.candidates) ? feature.candidates : []).map(({ id, name, image }) => ({
@@ -237,7 +268,10 @@ function FeatureWards({ feature, onSaved }) {
   );
 
   const [candidates, setCandidates] = useState(initialCandidates);
-  const [values, setValues] = useState(initialValues);
+  // Only the edited inputs; everything else shows its saved value (which also covers rows that appear late,
+  // like a paurashava added once /union/list loads).
+  const [edits, setEdits] = useState({});
+  const values = { ...initialValues, ...edits };
   const [openUnions, setOpenUnions] = useState(() => new Set(groups.slice(0, 1).map((g) => g.union_id)));
 
   const toggle = (unionId) =>
@@ -248,26 +282,34 @@ function FeatureWards({ feature, onSaved }) {
       return next;
     });
 
-  const changedCount = wards.filter((w) => values[w.code] !== initialValues[w.code]).length;
-  const grandTotal = wards.reduce((sum, w) => sum + (Number(values[w.code]) || 0), 0);
+  const changedCount = wards.filter((w) => values[wardKey(w)] !== initialValues[wardKey(w)]).length;
+  const grandTotal = wards.reduce((sum, w) => sum + (Number(values[wardKey(w)]) || 0), 0);
   const candidatesInvalid = candidates.some((c) => !c.name.trim());
 
   const handleCancel = () => {
     setCandidates(initialCandidates);
-    setValues(initialValues);
+    setEdits({});
   };
 
-  // Same shape as GET /feature/:id: every ward with its (possibly edited) total_voter.
+  // Every ward (and the paurashava's ward-less entry) with its (possibly edited) total_number.
   const handleSave = () => {
     const payload = {
       candidates: candidates.map((c) => ({ id: c.id, name: c.name.trim(), image: c.image.trim() })),
-      wards: wards.map((w) => ({ ...w, total_voter: Number(values[w.code]) || 0 })),
+      wards: wards.map((w) => ({
+        code: w.code,
+        ward_id: w.ward_id,
+        ward_no: w.ward_no,
+        union_id: w.union_id,
+        union_name: w.union_name,
+        total_number: Number(values[wardKey(w)]) || 0,
+      })),
     };
     updateFeature({ featureId: feature.id, data: payload })
       .unwrap()
       .then((res) => {
         successToaster(res?.message || 'Election updated successfully!');
         // Reload so the saved values become the new baseline for Cancel and the edited highlights.
+        setEdits({});
         onSaved?.();
       })
       .catch((err) => {
@@ -302,7 +344,7 @@ function FeatureWards({ feature, onSaved }) {
           <div className="text-gray-900">{candidates.length}</div>
         </div>
         <div className="ml-auto text-right">
-          <div className="text-xs text-gray-500">Total voters</div>
+          <div className="text-xs text-gray-500">Total number</div>
           <div className="font-semibold text-gray-900">{grandTotal.toLocaleString()}</div>
         </div>
       </div>
@@ -331,7 +373,7 @@ function FeatureWards({ feature, onSaved }) {
             </span>
             <button
               type="button"
-              onClick={() => setValues(initialValues)}
+              onClick={() => setEdits({})}
               className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50"
             >
               Reset
@@ -353,7 +395,7 @@ function FeatureWards({ feature, onSaved }) {
               open={openUnions.has(group.union_id)}
               onToggle={() => toggle(group.union_id)}
               values={values}
-              onChange={(code, value) => setValues((prev) => ({ ...prev, [code]: value }))}
+              onChange={(key, value) => setEdits((prev) => ({ ...prev, [key]: value }))}
             />
           ))}
         </div>
