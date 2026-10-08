@@ -5,7 +5,8 @@ const baseQuery = fetchBaseQuery({
   baseUrl: siteConfig?.baseUrl,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState()?.user?.token;
+    // const token = getState()?.user?.token;
+    const token = localStorage.getItem('token')
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }

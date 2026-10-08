@@ -309,10 +309,13 @@ export default function DhamraiMap({ className = '' }) {
 
   // Election results are optional too: without them wards just show their names.
   // Shape: { feature_id, title, union_id, candidates: [{id, name, image}], wards: { [code]: { totalVoters, votes: {[id]: n} } } }
-  // Elections to pick from: { data: [{ id, title }] }. No election is selected by default.
+  // Elections to pick from: { data: [{ id, title }] }. If there is exactly one it's selected by default,
+  // otherwise none is. `undefined` = the user hasn't picked yet; picking "Select election" (null) is respected.
   const { data: featureOptions } = useGetFeaturesDropdownQuery();
   const features = Array.isArray(featureOptions?.data) ? featureOptions.data : [];
-  const [featureId, setFeatureId] = useState(null);
+  const [pickedFeatureId, setFeatureId] = useState(undefined);
+  const featureId =
+    pickedFeatureId !== undefined ? pickedFeatureId : features.length === 1 ? features[0].id : null;
   // currentData (not data) so the previous election's numbers don't linger while the next one loads.
   // fulfilledTimeStamp changes on every successful response (new election, cached election or refetch),
   // so it's used below to redraw the ward labels, which are bound once per layer.
@@ -458,6 +461,28 @@ export default function DhamraiMap({ className = '' }) {
               setSelectedName(null); // every election (and "Select election") starts from the full upazila view
             }}
           />
+        )}
+
+        {/* Phones only: the legend panel (which highlights the selection) is usually hidden there. */}
+        {selectedName && (
+          <div className="flex items-center gap-2 rounded border border-gray-300 bg-white py-1 pl-2 pr-1 text-[13px] font-semibold text-gray-900 shadow sm:hidden">
+            <span
+              className="h-3 w-3 shrink-0 rounded-sm"
+              style={{ backgroundColor: colorByName[selectedName] }}
+            />
+            <span className="flex min-w-0 flex-1 flex-col leading-tight">
+              <span className="text-[11px] font-normal text-gray-500">ইউনিয়নের নাম:</span>
+              <span className="truncate">{selectedName}</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setSelectedName(null)}
+              aria-label="Show all unions"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-gray-500 hover:bg-gray-100"
+            >
+              <X size={16} />
+            </button>
+          </div>
         )}
 
         {error && <div className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 shadow">{error}</div>}

@@ -25,6 +25,19 @@ export const publicMapSlice = apiSlice.injectEndpoints({
         url: '/feature/dropdown',
         method: 'GET'
       })
+    }),
+    getFeatureById: builder.query({
+      query: ({featureId})=>({
+        url: `/feature/${featureId}`,
+        method: 'GET'
+      })
+    }),
+    updateFeatureById: builder.mutation({
+      query: ({featureId, data})=>({
+        url: `/feature/${featureId}`,
+        method: 'PUT',
+        body: data
+      })
     })
   }),
   overrideExisting: true,
@@ -34,5 +47,7 @@ export const {
     useGetUnionsCoverageQuery,
     useGetWardsCoverageQuery,
     useGetResultByFeatureIdQuery,
-    useGetFeaturesDropdownQuery
+    useGetFeaturesDropdownQuery,
+    useGetFeatureByIdQuery,
+    useUpdateFeatureByIdMutation
 } = publicMapSlice;
