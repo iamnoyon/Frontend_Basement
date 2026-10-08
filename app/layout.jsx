@@ -13,9 +13,9 @@ const manrope = Manrope({
 });
 
 export const metadata = {
-  title: "CloudCafe | Restaurant Management Platform",
-  description:
-    "CloudCafe is a complete restaurant management platform for managing orders, products, sales, customers, and business operations.",
+    title: "ধামরাই শারদীয় উৎসব ২০২৬ | Dhamrai Map",
+    description:
+        "Explore the map and locations of Dharmrai Sharadiya Utsav 2026, including unions, roads, and important places.",
 };
 
 export default async function RootLayout({ children }) {
