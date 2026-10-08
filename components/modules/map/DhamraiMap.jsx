@@ -95,7 +95,10 @@ function wardsToCollection(rows, unionRows) {
 
 const wardLabel = (feature) => `${feature.properties.union} – Ward ${feature.properties.ward}`;
 
-const formatNumber = (n) => n.toLocaleString('en-US');
+const formatNumber = (n) => (Number(n) || 0).toLocaleString('en-US');
+
+// A ward's voter count; the API may send it as totalVoters or total_voter, or leave it out.
+const entryVoters = (entry) => Number(entry?.totalVoters ?? entry?.total_voter) || 0;
 const percent = (part, whole) => (whole ? `${((part / whole) * 100).toFixed(1)}%` : '–');
 
 // Per-candidate votes, turnout and leader for one ward; null when the ward has no result entry.
@@ -114,7 +117,7 @@ function summarizeUnion(results, wards, unionName) {
 
   const total = { totalVoters: 0, votes: {} };
   entries.forEach((entry) => {
-    total.totalVoters += entry.totalVoters ?? 0;
+    total.totalVoters += entryVoters(entry);
     results.candidates.forEach(({ id }) => {
       total.votes[id] = (total.votes[id] ?? 0) + (entry.votes?.[id] ?? 0);
     });
@@ -127,14 +130,15 @@ function summarizeEntry(entry, candidates) {
   const totalVotes = rows.reduce((sum, row) => sum + row.votes, 0);
   const sorted = [...rows].sort((a, b) => b.votes - a.votes);
   const leader = sorted[0] && sorted[0].votes > (sorted[1]?.votes ?? 0) ? sorted[0] : null; // no leader on a tie
+  const totalVoters = entryVoters(entry);
 
   return {
     rows: rows.map((row) => ({ ...row, pct: percent(row.votes, totalVotes) })),
     totalVotes,
-    totalVoters: entry.totalVoters,
-    turnout: percent(totalVotes, entry.totalVoters),
+    totalVoters,
+    turnout: percent(totalVotes, totalVoters),
     leader,
-    invalid: totalVotes > entry.totalVoters,
+    invalid: totalVoters > 0 && totalVotes > totalVoters, // unknown voter count isn't flagged as invalid
   };
 }
 
