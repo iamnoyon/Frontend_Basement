@@ -42,7 +42,7 @@ export const metadata = {
         type: 'image/jpeg',
         alt: 'Dhamrai Map',
       },
-    ],
+    ]
   },
   twitter: {
     card: "summary_large_image",
