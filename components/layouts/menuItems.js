@@ -13,9 +13,9 @@ export const menuItems = [
     activePath: ["/dashboard"],
   },
   {
-    name: "Users",
+    name: "Unions",
     icon: Users,
-    path: "/user-management/users",
+    path: "/union-management",
     activePath: ["/user-management/users"],
   }
 ];
