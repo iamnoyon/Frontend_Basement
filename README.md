@@ -100,6 +100,13 @@ next.config.js             Image remotePatterns
 
 ---
 
+## Map (Dhamrai)
+
+The map's lat/long data, its APIs and how to use them are documented in
+[components/modules/map/README.md](components/modules/map/README.md).
+
+---
+
 ## Localization (i18n)
 
 The app supports **English (`en`)** and **Bengali (`bn`)**. Default locale is `en`. The active locale lives in Redux (`state.i18n.locale`) and is mirrored to both `localStorage['app_locale']` and the `app_locale` cookie so SSR can pick the right language on first paint without a hydration mismatch.
