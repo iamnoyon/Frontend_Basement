@@ -11,14 +11,12 @@ export const menuItems = [
     icon: LayoutDashboard,
     path: "/dashboard",
     activePath: ["/dashboard"],
-    requiredPermissions: ["dashboard:read"]
   },
   {
     name: "Users",
     icon: Users,
     path: "/user-management/users",
     activePath: ["/user-management/users"],
-    requiredPermissions: ["user:read"],
   }
 ];
 

@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { siteConfig } from "@/config/siteConfig";
+import { useRouter } from "next/navigation";
 
 export default function LoginForMap() {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const router = useRouter()
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -26,6 +28,7 @@ export default function LoginForMap() {
 
             const data = await response.json();
             localStorage.setItem('token', data?.data?.access_token)
+            router.replace('/dashboard')
 
             console.log(data);
         } catch (error) {

@@ -83,7 +83,7 @@ export default function Sidebar({ onNavClick, hideToggle }) {
         {showText && (
           !user?.business?.businessName ? (
             <h1 className="text-xl font-semibold tracking-tight text-[var(--color-accent)]">
-              {user?.business?.businessName}
+              {user?.business?.businessName || 'Dhamrai'}
             </h1>
           ) : (
             <div className="flex items-center gap-1">

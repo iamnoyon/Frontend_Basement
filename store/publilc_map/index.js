@@ -38,6 +38,13 @@ export const publicMapSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: data
       })
+    }),
+    getDurgaPujaList: builder.query({
+      query: ({featureId})=>({
+        url: '/durga-puja/list',
+        method: 'GET',
+        params: { feature_id: featureId }
+      })
     })
   }),
   overrideExisting: true,
@@ -49,5 +56,6 @@ export const {
     useGetResultByFeatureIdQuery,
     useGetFeaturesDropdownQuery,
     useGetFeatureByIdQuery,
-    useUpdateFeatureByIdMutation
+    useUpdateFeatureByIdMutation,
+    useGetDurgaPujaListQuery
 } = publicMapSlice;

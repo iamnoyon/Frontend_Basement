@@ -2,6 +2,9 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { siteConfig } from "./config/siteConfig";
 
+// The backend's access token lives 24h (expires_in: 86400), so the session shouldn't outlive it.
+const SESSION_MAX_AGE = 60 * 60 * 24;
+
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
@@ -25,22 +28,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
           );
 
+          // { success, message, data: { access_token, token_type, expires_in, user: { id, full_name, email, role } } }
           const data = await res.json();
+          const accessToken = data?.data?.access_token;
 
-          if (!data?.success || !data?.token) {
+          if (!res.ok || !data?.success || !accessToken) {
             return null;
           }
 
-          const user = data?.data;
+          const user = data.data.user;
 
           return {
-            id: user?.id,
-            name: user?.name,
+            id: String(user?.id),
+            name: user?.full_name,
             email: user?.email,
-            image: user?.profileImageUrl,
+            image: user?.profileImageUrl ?? null,
             role: user?.role,
-            token: data.token,
-            permissions: user?.permissions,
+            token: accessToken,
+            // Absolute expiry of the backend token (expires_in is in seconds).
+            tokenExpiresAt: Date.now() + (Number(data.data.expires_in) || SESSION_MAX_AGE) * 1000,
+            permissions: user?.permissions ?? null,
           };
         } catch (error) {
           console.error("Auth error:", error);
@@ -51,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   session: {
     strategy: "jwt",
+    maxAge: SESSION_MAX_AGE,
   },
   pages: {
     signIn: "/",
@@ -63,6 +71,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.backendToken = user.token;
         token.profileImageUrl = user.image;
         token.permissions = user.permissions;
+        token.tokenExpiresAt = user.tokenExpiresAt;
+      }
+      // Backend token expired: end the session so the user signs in again.
+      if (token.tokenExpiresAt && Date.now() >= token.tokenExpiresAt) {
+        return null;
       }
       return token;
     },

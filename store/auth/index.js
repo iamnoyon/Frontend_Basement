@@ -3,10 +3,9 @@ import { apiSlice } from "../apiSlice";
 export const authSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     profile: builder.query({
-      query: (token) => ({
-        url: "/auth/profile",
+      query: () => ({
+        url: "/auth/me",
         method: "GET",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
       }),
     }),
     logout: builder.mutation({
