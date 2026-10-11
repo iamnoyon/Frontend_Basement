@@ -232,7 +232,7 @@ function ElectionSelect({ options, value, onChange }) {
     if (id !== value) onChange(id);
   };
 
-  const items = [{ id: null, title: 'Select election' }, ...options];
+  const items = [{ id: null, title: 'Select' }, ...options];
 
   return (
     <div ref={rootRef} className="relative w-full">
@@ -245,7 +245,7 @@ function ElectionSelect({ options, value, onChange }) {
         className="flex h-9 w-full items-center gap-1 rounded border border-gray-300 bg-white pl-2 pr-1 text-left text-[13px] text-gray-800 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
       >
         <span className={`min-w-0 flex-1 truncate ${selected ? '' : 'text-gray-500'}`}>
-          {selected?.title ?? 'Select election'}
+          {selected?.title ?? 'Select'}
         </span>
         <ChevronDown size={14} className={`shrink-0 text-gray-500 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
