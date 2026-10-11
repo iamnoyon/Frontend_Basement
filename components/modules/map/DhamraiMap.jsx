@@ -29,6 +29,7 @@ import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet
 import L from 'leaflet';
 import { ChevronDown, List, RotateCw, TriangleAlert, X } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
+import Loading from '@/components/common/Loading';
 import {
   useGetFeaturesDropdownQuery,
   useGetResultByFeatureIdQuery,
@@ -369,7 +370,13 @@ export default function DhamraiMap({ className = '' }) {
   // Legend panel on phones: hidden by default, toggled with the button in the top-right (always shown from `sm` up).
   const [panelOpen, setPanelOpen] = useState(false);
 
-  const { data: unionRows, error: unionsError, isSuccess: unionsLoaded } = useGetUnionsCoverageQuery();
+  // isLoading is true only for the first load, so later refetches don't flash the loader.
+  const {
+    data: unionRows,
+    error: unionsError,
+    isSuccess: unionsLoaded,
+    isLoading: unionsLoading,
+  } = useGetUnionsCoverageQuery();
   // Wards are optional: if they fail to load, selecting a union just zooms to it.
   const { data: wardRows } = useGetWardsCoverageQuery();
 
@@ -577,6 +584,16 @@ export default function DhamraiMap({ className = '' }) {
       </div>
 
       {error && <MapErrorState message={error} />}
+
+      {unionsLoading && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute inset-0 z-[1000] flex items-center justify-center bg-gray-100/70"
+        >
+          <Loading text="Loading map…" />
+        </div>
+      )}
 
       {collection && (
         <button
