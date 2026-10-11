@@ -16,15 +16,15 @@ const SITE_TITLE = "ধামরাই শারদীয় উৎসব ২০
 const SITE_DESCRIPTION =
     "Explore the map and locations of Dhamrai Sharadiya Utsav 2026, including unions, roads, and important places.";
 // Public address of this site. Facebook/WhatsApp need absolute URLs for the shared link and preview image.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://dhamrai.systems.bd";
 
 export const metadata = {
     metadataBase: new URL(SITE_URL),
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     alternates: { canonical: "/" },
-    // Link previews on Facebook, WhatsApp, Messenger, LinkedIn, etc. The preview image comes from
-    // app/opengraph-image.png (1200x630) if that file exists; Next.js adds it to og:image / twitter:image.
+    // Link previews on Facebook, WhatsApp, Messenger, LinkedIn, etc. The preview image is app/opengraph-image.jpg
+    // (1200x630, alt text in opengraph-image.alt.txt); Next.js adds it to og:image / twitter:image.
     openGraph: {
         type: "website",
         url: "/",
