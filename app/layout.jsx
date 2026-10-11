@@ -12,10 +12,37 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
+const SITE_TITLE = "ধামরাই শারদীয় উৎসব ২০২৬ | Dhamrai Map";
+const SITE_DESCRIPTION =
+    "Explore the map and locations of Dhamrai Sharadiya Utsav 2026, including unions, roads, and important places.";
+// Public address of this site. Facebook/WhatsApp need absolute URLs for the shared link and preview image.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata = {
-    title: "ধামরাই শারদীয় উৎসব ২০২৬ | Dhamrai Map",
-    description:
-        "Explore the map and locations of Dharmrai Sharadiya Utsav 2026, including unions, roads, and important places.",
+    metadataBase: new URL(SITE_URL),
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    alternates: { canonical: "/" },
+    // Link previews on Facebook, WhatsApp, Messenger, LinkedIn, etc. The preview image comes from
+    // app/opengraph-image.png (1200x630) if that file exists; Next.js adds it to og:image / twitter:image.
+    openGraph: {
+        type: "website",
+        url: "/",
+        siteName: "Dhamrai Map",
+        title: SITE_TITLE,
+        description: SITE_DESCRIPTION,
+        locale: "bn_BD",
+        alternateLocale: ["en_US"],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: SITE_TITLE,
+        description: SITE_DESCRIPTION,
+    },
+    icons: {
+        icon: "/durga_icon.ico",
+        shortcut: "/durga_icon.ico",
+    },
 };
 
 export default async function RootLayout({ children }) {
