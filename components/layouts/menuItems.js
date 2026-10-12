@@ -16,8 +16,14 @@ export const menuItems = [
     name: "Unions",
     icon: Users,
     path: "/union-management",
-    activePath: ["/user-management/users"],
-  }
+    activePath: ["/user-management/"],
+  },
+  {
+    name: "Features",
+    icon: Users,
+    path: "/feature-management",
+    activePath: ["/feature-management/"],
+  },
 ];
 
 

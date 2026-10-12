@@ -19,5 +19,5 @@ export const apiSlice = createApi({
   baseQuery,
   refetchOnMountOrArgChange: true,
   endpoints: () => ({}),
-  tagTypes: ["userlist"]
+  tagTypes: ["userlist", "featurelist"]
 });
