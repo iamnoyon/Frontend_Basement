@@ -737,7 +737,7 @@ export default function DhamraiMap({ className = '' }) {
             <a href="https://offerkoi.bd/events/durga-puja-2026" target="_blank" rel="noopener noreferrer">
               {/* eslint-disable-next-line @next/next/no-img-element -- static promo image from /public */}
               <img
-                src="/puja_offer.png"
+                src="/puja_offer.webp"
                 alt="Offer"
                 className="max-h-[85vh] w-full rounded-lg object-contain shadow-2xl"
               />
