@@ -369,6 +369,8 @@ export default function DhamraiMap({ className = '' }) {
   const [selectedName, setSelectedName] = useState(null);
   // Legend panel on phones: hidden by default, toggled with the button in the top-right (always shown from `sm` up).
   const [panelOpen, setPanelOpen] = useState(false);
+  // Promo ad shown over the map once it has rendered; closed by the user with the X or the backdrop.
+  const [offerOpen, setOfferOpen] = useState(true);
 
   // isLoading is true only for the first load, so later refetches don't flash the loader.
   const {
@@ -713,6 +715,36 @@ export default function DhamraiMap({ className = '' }) {
           </>
         )}
       </MapContainer>
+
+      {/* Ad modal: opens once the map has rendered, dismissed with the X button or by clicking the backdrop. */}
+      {collection && offerOpen && (
+        <div
+          className="absolute inset-0 z-[1100] flex items-center justify-center bg-black/60 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Offer"
+          onClick={() => setOfferOpen(false)}
+        >
+          <div className="relative max-h-full w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setOfferOpen(false)}
+              aria-label="Close offer"
+              className="absolute -right-2 -top-2 z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-gray-700 shadow hover:bg-gray-100"
+            >
+              <X size={18} />
+            </button>
+            <a href="https://offerkoi.bd/events/durga-puja-2026" target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static promo image from /public */}
+              <img
+                src="/puja_offer.png"
+                alt="Offer"
+                className="max-h-[85vh] w-full rounded-lg object-contain shadow-2xl"
+              />
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
