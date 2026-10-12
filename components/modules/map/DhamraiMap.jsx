@@ -106,7 +106,7 @@ const percent = (part, whole) => (whole ? `${((part / whole) * 100).toFixed(1)}%
 // Per-candidate votes, turnout and leader for one ward; null when the ward has no result entry.
 function summarizeWard(results, code) {
   const entry = results?.wards?.[code];
-  return entry ? summarizeEntry(entry, results.candidates) : null;
+  return entry ? summarizeEntry(entry, results.candidates) : null
 }
 
 // Result entry for a union as a whole rather than per ward (e.g. the paurashava, which has no wards):
