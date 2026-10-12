@@ -30,6 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           // { success, message, data: { access_token, token_type, expires_in, user: { id, full_name, email, role } } }
           const data = await res.json();
+          console.log(data)
           const accessToken = data?.data?.access_token;
 
           if (!res.ok || !data?.success || !accessToken) {

@@ -33,7 +33,7 @@ export default function SessionSync() {
     data: profileData,
     isError,
     error,
-  } = useProfileQuery(undefined, {
+  } = useProfileQuery({token}, {
     skip: status !== "authenticated",
   });
 
