@@ -1,7 +1,7 @@
 // components/form/FormSelect.jsx
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import Select from "react-select";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -100,6 +100,9 @@ const FormSelect = ({
     control,
     formState: { errors },
   } = useFormContext();
+  // react-select numbers its generated ids with a global counter, which differs between the server and the
+  // client render and causes a hydration mismatch; useId is stable across both.
+  const instanceId = useId();
 
   // dynamic option convert
   const formattedOptions = options?.map((item) => ({
@@ -149,6 +152,7 @@ const FormSelect = ({
           return (
             <Select
               {...props}
+              instanceId={instanceId}
               inputId={name}
               options={formattedOptions}
               isMulti={isMulti}

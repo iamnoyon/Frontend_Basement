@@ -11,7 +11,7 @@ import FormSelect from '@/components/Forms/FormSelect';
 import FormRadioGroup from '@/components/Forms/FormRadioGroup';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useCreateFeatureMutation } from '@/store/admin/feature';
-import { useGetUnionsCoverageQuery } from '@/store/publilc_map';
+import { useGetUnionDropdownQuery } from '@/store/publilc_map';
 import { useRouter } from 'next/navigation';
 import useToaster from '@/components/hooks/useToaster';
 
@@ -22,8 +22,8 @@ const FeatureCreate = () => {
     const { errorToaster, successToaster } = useToaster();
     //api
     const [Create] = useCreateFeatureMutation()
-    const { data: unionData } = useGetUnionsCoverageQuery()
-    const unions = Array.isArray(unionData) ? unionData : unionData?.data || [];
+    const { data: unionData } = useGetUnionDropdownQuery()
+    const unions = unionData?.data || [];
 
     const methods = useForm({
         resolver: zodResolver(featureSchema),

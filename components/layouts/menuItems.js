@@ -24,6 +24,13 @@ export const menuItems = [
     path: "/feature-management",
     activePath: ["/feature-management/"],
   },
+  {
+    name: "Puja",
+    icon: Users,
+    path: "/puja-management",
+    activePath: ["/puja-management/"],
+  },
+
 ];
 
 
