@@ -163,12 +163,8 @@ function summarizeEntry(entry, candidates) {
   };
 }
 
-// Short candidate tag for map labels: "Candidate A" -> "A", "Rahim Uddin" -> "RU".
-const initials = (name) =>
-  name.startsWith('Candidate ') ? name.slice(10) : name.split(/\s+/).map((w) => w[0]).join('').toUpperCase();
-
 const resultLabelHtml = (title, summary) =>
-  `<strong>${title}</strong><br>${summary.rows.map((r) => `${initials(r.name)} ${formatNumber(r.votes)}`).join(' · ')}`;
+  `<strong>${title}</strong><br>${summary.rows.map((r) => `${r.name} ${formatNumber(r.votes)}`).join(' · ')}`;
 
 // Candidate votes, total voters, turnout and leader, as shown in the legend for a ward or a union.
 function ResultBreakdown({ summary, images }) {
