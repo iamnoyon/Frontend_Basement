@@ -1,7 +1,9 @@
 // components/layout/menuItems.js
 
 import {
+  Church,
   LayoutDashboard,
+  Sparkles,
   Users,
 } from "lucide-react";
 
@@ -12,21 +14,21 @@ export const menuItems = [
     path: "/dashboard",
     activePath: ["/dashboard"],
   },
-  {
-    name: "Unions",
-    icon: Users,
-    path: "/union-management",
-    activePath: ["/user-management/"],
-  },
+  // {
+  //   name: "Unions",
+  //   icon: Users,
+  //   path: "/union-management",
+  //   activePath: ["/user-management/"],
+  // },
   {
     name: "Features",
-    icon: Users,
+    icon: Sparkles,
     path: "/feature-management",
     activePath: ["/feature-management/"],
   },
   {
     name: "Puja",
-    icon: Users,
+    icon: Church,
     path: "/puja-management",
     activePath: ["/puja-management/"],
   },
