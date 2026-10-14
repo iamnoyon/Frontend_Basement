@@ -5,22 +5,22 @@
  *
  * Data: GET /feature/dropdown for the list of features, GET /durga-puja/list?feature_id=:id for the selected one
  * (see store/publilc_map).
- * /durga-puja/list -> { data: [{ id, feature_id, union_id, union_name, ward_code, ward_no,
- *   villages: [{ village_name, mondir_name, phone }], created_at, updated_at }] }
+ * /durga-puja/list -> { data: { [union_name]: { "ward-1": [villages], ..., or "paurashava": [villages] } } }, flattened
+ *   by the store to [{ key, union_name, ward_no, villages: [{ village_name, mondir_name, phone }] }].
  */
 
 import { useMemo, useState } from 'react';
 import { ChevronDown, Phone, Plus, Trash2 } from 'lucide-react';
 import { useGetDurgaPujaListQuery, useGetFeaturesDropdownQuery } from '@/store/publilc_map';
 
-// entries -> [{ union_id, union_name, wards: [...], mondirCount }], unions in first-seen order, wards by number.
+// entries -> [{ union_name, wards: [...], mondirCount }], unions in first-seen order, wards by number.
 function groupByUnion(entries) {
   const groups = new Map();
   for (const entry of entries) {
-    if (!groups.has(entry.union_id)) {
-      groups.set(entry.union_id, { union_id: entry.union_id, union_name: entry.union_name, wards: [], mondirCount: 0 });
+    if (!groups.has(entry.union_name)) {
+      groups.set(entry.union_name, { union_name: entry.union_name, wards: [], mondirCount: 0 });
     }
-    const group = groups.get(entry.union_id);
+    const group = groups.get(entry.union_name);
     group.wards.push(entry);
     group.mondirCount += entry.villages?.length ?? 0;
   }
@@ -221,7 +221,7 @@ function UnionAccordion({ group, open, onToggle }) {
       {open && (
         <div className="divide-y divide-gray-100 border-t border-gray-200">
           {group.wards.map((entry) => (
-            <div key={entry.id} className="px-4 py-3">
+            <div key={entry.key ?? entry.id} className="px-4 py-3">
               <div className="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="text-sm font-semibold text-gray-900">{wardLabel(entry)}</span>
                 {entry.ward_code && <span className="font-mono text-xs text-gray-500">{entry.ward_code}</span>}
@@ -239,7 +239,7 @@ function UnionAccordion({ group, open, onToggle }) {
 // Keyed by feature id in PujaDetails, so open panels reset when another feature is picked.
 function PujaList({ entries }) {
   const groups = useMemo(() => groupByUnion(entries), [entries]);
-  const [openUnions, setOpenUnions] = useState(() => new Set(groups.slice(0, 1).map((g) => g.union_id)));
+  const [openUnions, setOpenUnions] = useState(() => new Set(groups.slice(0, 1).map((g) => g.union_name)));
   const mondirTotal = groups.reduce((sum, g) => sum + g.mondirCount, 0);
 
   const toggle = (unionId) =>
@@ -276,7 +276,7 @@ function PujaList({ entries }) {
         <div className="ml-auto flex gap-2">
           <button
             type="button"
-            onClick={() => setOpenUnions(new Set(groups.map((g) => g.union_id)))}
+            onClick={() => setOpenUnions(new Set(groups.map((g) => g.union_name)))}
             className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm hover:bg-gray-50"
           >
             Expand all
@@ -294,10 +294,10 @@ function PujaList({ entries }) {
       <div className="space-y-2">
         {groups.map((group) => (
           <UnionAccordion
-            key={group.union_id}
+            key={group.union_name}
             group={group}
-            open={openUnions.has(group.union_id)}
-            onToggle={() => toggle(group.union_id)}
+            open={openUnions.has(group.union_name)}
+            onToggle={() => toggle(group.union_name)}
           />
         ))}
       </div>

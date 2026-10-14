@@ -27,10 +27,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Polygon, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { ChevronDown, List, RotateCw, TriangleAlert, X } from 'lucide-react';
+import { ChevronDown, List, Phone, RotateCw, TriangleAlert, X } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import Loading from '@/components/common/Loading';
 import {
+  useGetDurgaPujaDetailQuery,
   useGetFeaturesDropdownQuery,
   useGetResultByFeatureIdQuery,
   useGetUnionsCoverageQuery,
@@ -86,6 +87,7 @@ function wardsToCollection(rows, unionRows) {
       type: 'Feature',
       properties: {
         union: row.union_name ?? unionNameById[row.union_id],
+        union_id: row.union_id,
         ward: row.ward_no,
         code: row.code,
       },
@@ -325,6 +327,104 @@ function InlineError({ message }) {
   );
 }
 
+// Durga Puja entry of a clicked ward (GET /durga-puja/detail):
+// { data: { feature_title, union_name, ward_no, ward_code, puja_count, villages: [{ village_name, mondir_name, phone }] } }
+function PujaDetailModal({ detail, loading, error, onClose }) {
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  const villages = detail?.villages ?? [];
+
+  return (
+    <div
+      className="absolute inset-0 z-[1100] flex items-center justify-center bg-black/60 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Durga Puja details"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[85vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-2 top-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
+        >
+          <X size={18} />
+        </button>
+
+        {loading ? (
+          <div className="py-8">
+            <Loading text="Loading…" />
+          </div>
+        ) : error ? (
+          <div className="py-6 pr-8 text-sm text-gray-600">
+            {error.status === 404
+              ? 'No Durga Puja entries for this ward.'
+              : `Failed to load Durga Puja details (${error.status})`}
+          </div>
+        ) : detail ? (
+          <>
+            <div className="pr-8">
+              <h2 className="text-base font-semibold text-gray-900">{detail.feature_title}</h2>
+              <p className="mt-0.5 text-sm text-gray-600">
+                {detail.union_name}
+                {detail.ward_no != null && ` – Ward ${detail.ward_no}`}
+              </p>
+              {detail.ward_code && <p className="font-mono text-xs text-gray-400">{detail.ward_code}</p>}
+            </div>
+
+            <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-orange-700">
+              {formatNumber(detail.puja_count)} puja{detail.puja_count === 1 ? '' : 's'}
+            </div>
+
+            {villages.length ? (
+              <ul className="mt-3 divide-y divide-gray-100 rounded border border-gray-200">
+                {villages.map((v, i) => (
+                  <li key={`${v.village_name}-${v.mondir_name}-${i}`} className="space-y-0.5 px-3 py-2 text-sm">
+                    <div>
+                      <span className="text-gray-500">Village: </span>
+                      <span className="text-gray-900">{v.village_name || '–'}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Mondir: </span>
+                      <span className="font-medium text-gray-900">{v.mondir_name || '–'}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Phone: </span>
+                      {v.phone ? (
+                        <a
+                          href={`tel:${v.phone}`}
+                          className="inline-flex items-center gap-1 text-blue-600 hover:underline"
+                        >
+                          <Phone size={12} />
+                          {v.phone}
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">–</span>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm italic text-gray-500">No mondirs added.</p>
+            )}
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 // Outer rings of every polygon, converted from GeoJSON [lng, lat] to Leaflet [lat, lng].
 function getOuterRings(collection) {
   const rings = [];
@@ -411,6 +511,16 @@ export default function DhamraiMap({ className = '' }) {
   let dataError = null;
   if (featuresFailed) dataError = 'Failed to load elections';
   else if (featureId != null && resultsFailed) dataError = 'Failed to load election results';
+  // Ward clicked on the map ({ unionId, wardCode }); its Durga Puja entry for the selected feature opens in a popup.
+  const [pujaWard, setPujaWard] = useState(null);
+  const closePujaDetail = useCallback(() => setPujaWard(null), []);
+  const showPujaDetail = pujaWard != null && featureId != null;
+  const {
+    currentData: pujaDetailData,
+    isFetching: pujaDetailLoading,
+    error: pujaDetailError,
+  } = useGetDurgaPujaDetailQuery({ ...pujaWard, featureId }, { skip: !showPujaDetail });
+
   const candidateImages = useMemo(
     () => Object.fromEntries((results?.candidates ?? []).map((c) => [c.id, c.image])),
     [results],
@@ -536,6 +646,7 @@ export default function DhamraiMap({ className = '' }) {
       layer.bindTooltip(wardLabel(feature), { sticky: true });
     }
     layer.on({
+      click: () => setPujaWard({ unionId: feature.properties.union_id, wardCode: feature.properties.code }),
       mouseover: () => layer.setStyle({ weight: 3, fillOpacity: 0.85 }),
       mouseout: () => layer.setStyle(styleWard(feature)),
     });
@@ -556,6 +667,7 @@ export default function DhamraiMap({ className = '' }) {
               setFeatureId(id);
               setAutoSelectedFor(null); // let the new election's union (if any) be auto-selected
               setSelectedName(null); // every election (and "Select election") starts from the full upazila view
+              setPujaWard(null);
             }}
           />
         )}
@@ -715,6 +827,15 @@ export default function DhamraiMap({ className = '' }) {
           </>
         )}
       </MapContainer>
+
+      {showPujaDetail && (
+        <PujaDetailModal
+          detail={pujaDetailData?.data}
+          loading={pujaDetailLoading}
+          error={pujaDetailError}
+          onClose={closePujaDetail}
+        />
+      )}
 
       {/* Ad modal: opens once the map has rendered, dismissed with the X button or by clicking the backdrop. */}
       {collection && offerOpen && (

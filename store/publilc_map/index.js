@@ -4,6 +4,26 @@ import { apiSlice } from "../apiSlice";
 // array, so unwrap here (still accepting a bare array from older backends).
 const unwrapRows = (response) => (Array.isArray(response) ? response : response?.data ?? []);
 
+// /durga-puja/list sends { data: { [union_name]: { "ward-1": [villages], ..., or "paurashava": [villages] } } };
+// flatten it to one row per ward: { key, union_name, ward_no (null for a whole area), villages }.
+// An already-flat array (older backend) is passed through.
+const flattenPujaList = (response) => {
+  const data = response?.data;
+  if (!data || Array.isArray(data)) return response;
+  const rows = Object.entries(data).flatMap(([union_name, wards]) =>
+    Object.entries(wards ?? {}).map(([wardKey, villages]) => {
+      const wardNo = Number(/^ward-(\d+)$/.exec(wardKey)?.[1]);
+      return {
+        key: `${union_name}-${wardKey}`,
+        union_name,
+        ward_no: Number.isFinite(wardNo) ? wardNo : null,
+        villages: Array.isArray(villages) ? villages : [],
+      };
+    }),
+  );
+  return { ...response, data: rows };
+};
+
 export const publicMapSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUnionsCoverage: builder.query({
@@ -50,6 +70,14 @@ export const publicMapSlice = apiSlice.injectEndpoints({
         url: '/durga-puja/list',
         method: 'GET',
         params: { feature_id: featureId }
+      }),
+      transformResponse: flattenPujaList,
+    }),
+    getDurgaPujaDetail: builder.query({
+      query: ({unionId, wardCode, featureId})=>({
+        url: '/durga-puja/detail',
+        method: 'GET',
+        params: { union_id: unionId, ward_code: wardCode, feature_id: featureId }
       })
     }),
     getUnionDropdown: builder.query({
@@ -77,6 +105,7 @@ export const {
     useGetFeatureByIdQuery,
     useUpdateFeatureByIdMutation,
     useGetDurgaPujaListQuery,
+    useGetDurgaPujaDetailQuery,
     useGetUnionDropdownQuery,
     useLazyGetWardDropdownQuery
 } = publicMapSlice;
