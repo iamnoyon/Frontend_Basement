@@ -1,4 +1,5 @@
 import { Manrope } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 import LocalizationProvider from "@/components/providers/LocalizationProvider";
@@ -79,6 +80,20 @@ export default async function RootLayout({ children }) {
           hideProgressBar={false}
           newestOnTop={false}
         />
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-D41ERKPF00"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-D41ERKPF00');
+          `}
+        </Script>
       </body>
     </html>
   );
